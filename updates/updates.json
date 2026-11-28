@@ -1,7 +1,7 @@
 {
  "format": 1,
- "version": "v8.193.39",
- "notes": "Version column (V1 to V10, required for Proposal and In Process), Version in reports and printing, Entered By / Delivered By / Delivered At next to it, reorder table columns from Settings.",
+ "version": "v8.203.40",
+ "notes": "Return reset by admin, Delivered marks cleared automatically, Version change syncs to drivers",
  "files": {
   "app/access_control.py": {
    "sha256": "a2d21ffde045f2ea539d8d36887612adbc6afa912f3e8a938da1e4d73754517d",
@@ -12,16 +12,16 @@
    "size": 3400
   },
   "app/cloudsync.py": {
-   "sha256": "53b87b131e183fdf00896f7b0ccd07c12a3779fa82b04be2920aed52fad6369b",
-   "size": 17360
+   "sha256": "2936623f63511d3044d511eb228d1cb23f6f6f07dbf6a5ee126a204cb27088cf",
+   "size": 17371
   },
   "app/connectedtest.py": {
    "sha256": "b79364fbac384774d40774a5efeb8f2616f1e908fcae41edc04c0e2b292a3a7b",
    "size": 2503
   },
   "app/core.py": {
-   "sha256": "2b08150928e2544cc49a00cf97231b280576e2f54392777e23e960e9d5824f39",
-   "size": 54917
+   "sha256": "161790afdafe22a186805024609af161916ca1c15b2d740f8e1eec5eba9586aa",
+   "size": 58913
   },
   "app/customer.py": {
    "sha256": "8f7f8305a81c396773d21d2aba250773171723be3802e0f394b55ef4eddb3e5b",
@@ -104,8 +104,8 @@
    "size": 4136
   },
   "app/server.py": {
-   "sha256": "149c498e491ed7069c87cc4a7ceb94fa0fae0b97b99422a9194bfb56611e357c",
-   "size": 144657
+   "sha256": "8bfddb5447d4d2316053134e6f1ecc9eb150c221a4692f26360697258296c103",
+   "size": 145338
   },
   "app/static/app.css": {
    "sha256": "af4b42c6ede64ed9ad4f518995dc89fdef836adb91cd94eea31b93b74b4148cd",

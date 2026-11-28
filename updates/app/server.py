@@ -125,6 +125,10 @@ def migrate_wh():
 
 
 ACTOR = threading.local()
+def _actor_info():
+    u = getattr(ACTOR, "user", "")
+    return (u, bool(access_control.is_admin(u))) if u else None
+core.ACTOR_INFO = _actor_info
 
 
 def save_doc(uid, d):
@@ -137,10 +141,7 @@ def save_doc(uid, d):
         if _old is not None and _old.get("Invoice Status") != "Delivered" and not str(d.get("Delivered By", "")).strip():
             d["Delivered By"] = ACTOR.user
             d["Delivered At"] = time.strftime("%d/%m/%Y %H:%M:%S")
-    if not d.get("_kind") and d.get("Invoice Status") == "inprocess":
-        _old2 = docs.get(uid)
-        if _old2 is not None and _old2.get("Invoice Status") == "Delivered":
-            d["Delivered By"] = ""; d["Delivered At"] = ""   # set back to In Process: the delivery mark is cleared
+    core.clean_delivery_marks(d)   # any status other than Delivered clears Delivered By / Delivered At
     if not d.get("_kind") and getattr(ACTOR, "user", ""):
         d["Last Updated By"] = ACTOR.user
     if core.TRIAL_LIMIT and not d.get("_kind"):  # trial: a real edit of an existing invoice counts as one operation
@@ -155,6 +156,30 @@ def save_doc(uid, d):
     bump()
     sync_now.set()
     request_cloud()
+
+
+def sweep_delivery_marks():
+    """One-time cleanup and safety net: invoices that are not Delivered but still carry Delivered By/At (old data, old PCs syncing)."""
+    n = 0
+    for uid, d in list(docs.items()):
+        if core.has_stale_delivery_marks(d):
+            nd = dict(d)
+            core.clean_delivery_marks(nd)
+            try:
+                save_doc(uid, nd); n += 1
+            except Exception:
+                pass
+    return n
+
+
+def delivery_sweep_loop():
+    time.sleep(25)
+    while True:
+        try:
+            if not core.TRIAL_LIMIT: sweep_delivery_marks()
+        except Exception:
+            pass
+        time.sleep(60)
 
 
 def notify_list(user):
@@ -2508,6 +2533,7 @@ def main():
     if core.db is not None and not core.TEST_MODE:PROJECT_USAGE.start()
     threading.Thread(target=lan_loop, daemon=True).start()
     threading.Thread(target=cloud_loop, daemon=True).start()
+    threading.Thread(target=delivery_sweep_loop, daemon=True).start()
     import socket as _s
     port = 0
     env_port = int(os.environ.get("DPROGRAM_PORT", "0") or 0)

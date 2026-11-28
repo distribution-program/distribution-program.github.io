@@ -176,7 +176,7 @@ ACCENT, ACCENT_2, ACCENT_3 = "#0f4c81", "#2b6cb0", "#1e4e8c"
 SIDE_PAL = {"light": dict(home="#e2e8f0", search="#dbeafe", new="#dcfce7", und="#ffedd5", details="#ede9fe", rep="#fce7f3", wh="#cffafe", rgr="#fef9c3"),
             "dark": dict(home="#334155", search="#1e3a8a", new="#14532d", und="#7c2d12", details="#4c1d95", rep="#831843", wh="#164e63", rgr="#713f12")}
 SIDE_FG = {"light": "#1e293b", "dark": "#f1f5f9"}
-APP_VERSION = "v8.193.39"
+APP_VERSION = "v8.203.40"
 VERSION = APP_VERSION + (" Replica" if REPLICA else " Main")
 CREDIT = "\u00a9 2026 Distribution Program. All rights reserved.   |   Made by Eng. Kirollos William"
 MAX_ROWS = 1200   # a screen never loads more than this (keeps every tab fast); the newest rows are shown
@@ -250,8 +250,81 @@ def setmeta(k, v):
     q("INSERT OR REPLACE INTO meta VALUES(?,?)", (k, str(v)))
 
 
+def has_stale_delivery_marks(d):
+    """True when an invoice that is not Delivered still carries Delivered By / Delivered At."""
+    return (isinstance(d, dict) and not d.get("_kind") and d.get("_deleted") is not True
+            and d.get("Invoice Status") != "Delivered"
+            and bool(str(d.get("Delivered By", "") or "").strip() or str(d.get("Delivered At", "") or "").strip()))
+
+
+def clean_delivery_marks(d):
+    """Delivered By / Delivered At exist only while the status is Delivered: any other status clears them."""
+    if has_stale_delivery_marks(d):
+        d["Delivered By"] = ""; d["Delivered At"] = ""
+        return True
+    return False
+
+
+# Return-to-office reset: an invoice that comes back from a driver (status moves from a "with driver" status to a "back" status)
+# loses its driver data, so it is empty again like a newly received one. All three lists are configurable: a file
+# return_reset.json in the data folder ({"fields":[...],"from":[...],"to":[...]}) replaces the defaults below.
+RETURN_RESET_FIELDS = ["Car No", "Driver name", "Distribution Rep", "Distribution Rep1", "Distributed Date", "Line", "Version",
+                       "Delivered By", "Delivered At"]
+RETURN_FROM = ["inprocess", "Proposal", "Delivered"]
+RETURN_TO = ["Undelivered"]
+try:
+    with open(os.path.join(DATA_DIR, "return_reset.json"), encoding="utf-8") as _f:
+        _rr = json.load(_f)
+    if isinstance(_rr.get("fields"), list): RETURN_RESET_FIELDS = [str(x) for x in _rr["fields"]]
+    if isinstance(_rr.get("from"), list): RETURN_FROM = [str(x) for x in _rr["from"]]
+    if isinstance(_rr.get("to"), list): RETURN_TO = [str(x) for x in _rr["to"]]
+except Exception:
+    pass
+
+
+def apply_return_reset(old, d):
+    """Status moved from a with-driver status to a back status: clear the reset fields, except a value the same save set on purpose."""
+    if not isinstance(old, dict) or not isinstance(d, dict) or d.get("_kind") or d.get("_deleted") is True: return False
+    if old.get("Invoice Status") == d.get("Invoice Status"): return False
+    if old.get("Invoice Status") not in RETURN_FROM or d.get("Invoice Status") not in RETURN_TO: return False
+    changed = False
+    for f in RETURN_RESET_FIELDS:
+        if str(d.get(f, "") or "") != "" and d.get(f) == old.get(f):
+            d[f] = ""; changed = True
+    return changed
+
+
+ACTOR_INFO = None   # server sets this: returns (user, is_admin) for the request thread, or None for sync/background
+
+
+def guard_return(old, d):
+    """Returning an invoice (undo Delivered, or take it back from a driver) is ADMIN only. Admin edit clears the reset fields.
+    Sync and background writes (no signed-in actor) are not reset here and not blocked."""
+    if d.get("_kind") or d.get("_deleted") is True: return
+    a = ACTOR_INFO() if ACTOR_INFO else None
+    if not a: return
+    user, admin = a
+    o, n = old.get("Invoice Status"), d.get("Invoice Status")
+    leaving = (o == "Delivered" and n != "Delivered") or (o in RETURN_FROM and n in RETURN_TO)
+    filled = any(str(old.get(f, "") or "") != "" for f in RETURN_RESET_FIELDS)
+    if o == "Delivered" and filled and not admin:
+        # a Delivered invoice with driver/delivery fields filled: only ADMIN may return it or clear those fields
+        if n != "Delivered" or any(str(d.get(f, "") or "") == "" for f in RETURN_RESET_FIELDS if str(old.get(f, "") or "") != ""):
+            raise ValueError("Only ADMIN can return a Delivered invoice or clear its driver and delivery fields. Ask the administrator.")
+        return
+    if leaving: apply_return_reset(old, d)
+
+
 def db_put(items, dirty=1, lan=1):
     with LOCK:
+        for _u, _d in items:   # every local save path ends here
+            if not _d.get("_kind"):
+                _r = cx.execute("SELECT data FROM inv WHERE uid=?", (_u,)).fetchone()
+                if _r:
+                    try: _old = json.loads(_r[0])
+                    except Exception: _old = None
+                    if isinstance(_old, dict): guard_return(_old, _d)
+            clean_delivery_marks(_d)
         for uid, data in items:
             if cx.execute("SELECT 1 FROM dellan WHERE uid=?", (uid,)).fetchone():
                 raise ValueError("This invoice was deleted. Reusing its number needs an explicit restore: " + uid)

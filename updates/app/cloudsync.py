@@ -148,7 +148,7 @@ class CloudSync:
         names = getattr(self, "_dn", None)
         if names is None: names = self._dn = set()
         old = old or {}; new = new or {}
-        keys = ("Driver name", "Invoice Status", "Delivered By", "Delivered At")
+        keys = ("Driver name", "Invoice Status", "Delivered By", "Delivered At", "Version")
         if old and all(old.get(k) == new.get(k) for k in keys): return
         for d in (old, new):
             n = str(d.get("Driver name", "") or "").strip()
