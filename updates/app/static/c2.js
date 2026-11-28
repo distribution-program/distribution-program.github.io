@@ -192,7 +192,7 @@ class Grid {
       ed = autoCombo({ getvals: () => this.statusList, readonlyList: true, value: old });
       getv = () => ed.val();
     } else if (this.listFor && this.listFor(col, uid)) {
-      ed = autoCombo({ getvals: () => this.listFor(col, uid), value: old });
+      ed = autoCombo({ getvals: () => this.listFor(col, uid), value: old, readonlyList: col === "Version" });
       getv = () => ed.val();
     } else {
       ed = el("input", "cell-editor"); ed.value = old;

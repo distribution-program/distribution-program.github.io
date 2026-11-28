@@ -34,13 +34,14 @@ function buildHome(group=null) {
  if(typeof applyTopbarLayout==='function')applyTopbarLayout();
 }
 
-const DISPATCH_FIELDS=["Driver name","Car No","Line","Distribution Rep","Distributed Date"];
+const DISPATCH_FIELDS=["Driver name","Car No","Line","Version","Distribution Rep","Distributed Date"];
 function dispatchControls(container,rec,onInput){
  const wrap=el("div","dispatch-wrap"),label=el("label","dispatch-toggle"),check=el("input");check.type="checkbox";check.dataset.dispatch="toggle";
  label.append(check,el("span","slab","Prepare dispatch now"));wrap.appendChild(label);
  const panel=el("div","mgrid hidden");panel.style.marginTop="12px";const widgets={};
  for(const name of DISPATCH_FIELDS){const f=el("div","fld");f.appendChild(el("label",null,name));let w;
-  if(name==="Line"){const input=el("select","in");for(const v of ["","1","2","3","4","5"]){const o=el("option",null,v);o.value=v;input.appendChild(o);}w={input,val:()=>input.value};}
+  if(name==="Version"){const input=el("select","in");for(const v of [""].concat(S.lists.version||[])){const o=el("option",null,v);o.value=v;input.appendChild(o);}w={input,val:()=>input.value};}
+  else if(name==="Line"){const input=el("select","in");for(const v of ["","1","2","3","4","5"]){const o=el("option",null,v);o.value=v;input.appendChild(o);}w={input,val:()=>input.value};}
   else if(S.listFields[name])w=autoCombo({getvals:()=>listFor(name)});
   else {const input=el("input","in");w={input,val:()=>input.value};}
   w.input.value=rec[name]||"";w.input.dataset.dispatchField=name;f.appendChild(w.isAc?w:w.input);widgets[name]=w;panel.appendChild(f);
@@ -67,7 +68,7 @@ function initNew() {
       w = autoCombo({ getvals: () => S.statuses, readonlyList: true });
     } else if (S.listFields[c]) {
       w = autoCombo({ autoNearest:c==="Customer Name",getvals: () => listFor(c, NEWF["Customer Name"] ? NEWF["Customer Name"].val() : ""),
-                      fullList: c === "Customer Name" });
+                      fullList: c === "Customer Name", readonlyList: c === "Version" });
     } else {
       const inp = el("input", "in");
       w = { input: inp, val() { return this.input.value; }, set(v) { this.input.value = v; } };
@@ -251,6 +252,9 @@ function initReport() {
   RB.line = el("select", "in");
   RB.line.append(el("option", null, ""), ...["1", "2", "3", "4", "5"].map(x => el("option", null, x)));
   mk("Line", RB.line);
+  RB.ver = el("select", "in");
+  RB.ver.append(el("option", null, ""), ...(S.lists.version || []).map(x => el("option", null, x)));
+  mk("Version", RB.ver);
   const pr = el("button", "btn big accent", "Print");
   pr.onclick = printRoute;
   bar.appendChild(pr);
@@ -258,7 +262,7 @@ function initReport() {
   sv.onclick = saveRoute;
   bar.appendChild(sv);
   repGrid = new Grid($("#rep-grid"), {
-    cols: S.repCols, editable: new Set(["District", "Distributed Date", "Driver name", "Car No", "Line", "Remarks"]),
+    cols: S.repCols, editable: new Set(["District", "Distributed Date", "Driver name", "Car No", "Line", "Version", "Remarks"]),
     locked: new Set(), statusList: S.statuses, dateCols: S.dateCols,
     listFor: (col, uid) => listFor(col, routeCust(uid)),
     onEdit: editFieldRoute,
@@ -266,13 +270,13 @@ function initReport() {
   let t = null;
   const deb = () => { clearTimeout(t); t = setTimeout(fillRoute, 700); };
   for (const n of [RB.date, RB.drv.input, RB.car.input]) n.addEventListener("input", deb);
-  RB.line.onchange = deb;
+  RB.line.onchange = deb; RB.ver.onchange = deb;
 }
 function routeCust(uid) {
   const row = repGrid.rows.find(r => r.uid === uid);
   return row ? row.v[S.repCols.indexOf("Customer Name")] : "";
 }
-function routeF() { return { date: RB.date.value, drv: RB.drv.val(), car: RB.car.val(), line: RB.line.value }; }
+function routeF() { return { date: RB.date.value, drv: RB.drv.val(), car: RB.car.val(), line: RB.line.value, ver: RB.ver.value }; }
 async function fillRoute() {
   const p = await apiQ("/api/query/route", { rep: S.repStatus, f: routeF() });
   repGrid.setRows(p.rows);
@@ -281,7 +285,7 @@ async function fillRoute() {
 function resetRoute() {
   const d = new Date();
   RB.date.value = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
-  RB.drv.set(""); RB.car.set(""); RB.line.value = "";
+  RB.drv.set(""); RB.car.set(""); RB.line.value = ""; RB.ver.value = "";
   fillRoute();
 }
 async function editFieldRoute(uid, col, val, reason) {

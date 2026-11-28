@@ -41,7 +41,7 @@ function districtBatchEditor(ids,data,done){if(!ids.length)return;const rows=dat
 function installClearSearch(){
  const add=(host,run)=>{if(!host||host.querySelector('[data-clear-search]'))return;const b=el('button','btn','Clear search');b.dataset.clearSearch='1';b.onclick=run;host.append(b)};
  setTimeout(()=>{
-  add($('#rep-bar'),()=>{RB.date.value='';RB.drv.set('');RB.car.set('');RB.line.value='';fillRoute()});
+  add($('#rep-bar'),()=>{RB.date.value='';RB.drv.set('');RB.car.set('');RB.line.value='';RB.ver.value='';fillRoute()});
   add($('#ho-form'),()=>{for(const x of [HO.from,HO.to,HO.fw,HO.ty,HO.pt])if(x)x.value=''});
   const pi=$('#pi-q');if(pi)add(pi.parentElement,()=>{pi.value='';$('#pi-date').value='';piShow()});
  },0);

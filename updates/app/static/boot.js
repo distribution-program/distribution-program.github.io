@@ -526,18 +526,27 @@ function columnsPicker(showOrder, order) {
   const boxes = [];
   const upd = () => { cnt.textContent = sel.size + " / " + showOrder.length + " " + T("selected"); };
   const bAll = el("button", "btn", T("Select all")), bNone = el("button", "btn", T("Clear all")), bDef = el("button", "btn", T("Restore default view"));
-  bAll.onclick = () => { showOrder.forEach(n => sel.add(n)); boxes.forEach(b => b.checked = true); upd(); };
-  bNone.onclick = () => { sel.clear(); boxes.forEach(b => b.checked = false); upd(); };
-  bDef.onclick = () => { const d = DEFAULT_COLS.filter(x => S.cols.includes(x)); sel.clear(); d.forEach(n => sel.add(n)); boxes.forEach((b, k) => b.checked = sel.has(showOrder[k])); upd(); };
+  bAll.onclick = () => { showOrder.forEach(n => sel.add(n)); paint(); upd(); };
+  bNone.onclick = () => { sel.clear(); paint(); upd(); };
+  bDef.onclick = () => { const d = DETAIL_COLS.filter(x => S.cols.includes(x)); sel.clear(); d.forEach(n => sel.add(n)); const def = canonicalColsDefault(S.cols); showOrder.splice(0, showOrder.length, ...def); paint(); upd(); };
   [bAll, bNone, bDef, cnt].forEach(x => bar.appendChild(x));
   c.appendChild(bar);
-  const grid = el("div"); grid.style.cssText = "display:grid;grid-template-columns:repeat(3,1fr);gap:2px 14px;max-height:56vh;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px";
-  showOrder.forEach(name => {
-    const lab = el("label"); lab.style.cssText = "display:flex;align-items:center;gap:8px;padding:3px 0;cursor:pointer";
-    const cb = el("input"); cb.type = "checkbox"; cb.checked = sel.has(name);
-    cb.onchange = () => { cb.checked ? sel.add(name) : sel.delete(name); upd(); };
-    boxes.push(cb); lab.appendChild(cb); lab.appendChild(el("span", null, T(name))); grid.appendChild(lab);
-  });
+  const grid = el("div"); grid.style.cssText = "display:flex;flex-direction:column;gap:2px;max-height:56vh;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px";
+  c.appendChild(el("div", "hint", T("Use the arrows to move a column. The order is saved on this PC and used in every table.")));
+  const paint = () => {
+    grid.innerHTML = ""; boxes.length = 0;
+    showOrder.forEach((name, i) => {
+      const lab = el("div"); lab.style.cssText = "display:flex;align-items:center;gap:8px;padding:3px 4px;border-bottom:1px solid #eef2f7";
+      const cb = el("input"); cb.type = "checkbox"; cb.checked = sel.has(name);
+      cb.onchange = () => { cb.checked ? sel.add(name) : sel.delete(name); upd(); };
+      boxes.push(cb);
+      const nm = el("span", null, (i + 1) + ".  " + T(name)); nm.style.flex = "1";
+      const mv = (d, txt) => { const bt = el("button", "btn", txt); bt.style.cssText = "padding:1px 10px;min-width:34px"; bt.disabled = i + d < 0 || i + d >= showOrder.length;
+        bt.onclick = () => { const x = showOrder[i]; showOrder[i] = showOrder[i + d]; showOrder[i + d] = x; paint(); }; return bt; };
+      lab.append(cb, nm, mv(-1, "\u2191"), mv(1, "\u2193")); grid.appendChild(lab);
+    });
+  };
+  paint();
   c.appendChild(grid);
   const row = el("div", "mrow");
   const save = el("button", "btn accent", T("Save")), cancel = el("button", "btn", T("Cancel"));
@@ -545,7 +554,7 @@ function columnsPicker(showOrder, order) {
   upd();
   const { close } = modal(c, "820px");
   cancel.onclick = close;
-  save.onclick = () => { PREFS.cols = showOrder.filter(n => sel.has(n)); savePrefs(); refreshCurrent(); close(); };
+  save.onclick = () => { PREFS.cols = showOrder.filter(n => sel.has(n)); PREFS.order = showOrder.slice(); savePrefs(); refreshCurrent(); close(); };
 }
 
 function settingsModal() {
@@ -634,7 +643,7 @@ function settingsModal() {
   c.appendChild(el("h3", null, T("Table density"))).style.cssText = "margin:14px 0 6px;font-size:14px;color:var(--accent)";
   c.appendChild(dn);
   // grid columns: show/hide is view-only - data, search, reports and exports always keep everything
-  const order = (PREFS.cols === null ? DEFAULT_COLS : PREFS.cols).filter(x => S.cols.includes(x));
+  const order = (PREFS.cols === null ? DETAIL_COLS : PREFS.cols).filter(x => S.cols.includes(x));
   const showOrder = canonicalCols(S.cols);
   c.appendChild(el("h3", null, T("Table columns") + " (" + showOrder.length + ")")).style.cssText = "margin:14px 0 6px;font-size:14px;color:var(--accent)";
   c.appendChild(el("div", "hint", T("Hiding a column only changes this screen on this PC. Nothing is deleted: hidden columns stay saved, searchable and printable.") + " " + T("Scroll inside the list to see them all.")));
@@ -642,7 +651,7 @@ function settingsModal() {
   colBtn.onclick = () => columnsPicker(showOrder, order);
   c.appendChild(colBtn);
   const rst = el("button", "btn", T("Restore default view"));
-  rst.onclick = () => { PREFS.cols = null; savePrefs(); refreshCurrent(); close(); settingsModal(); };
+  rst.onclick = () => { PREFS.cols = null; PREFS.order = null; savePrefs(); refreshCurrent(); close(); settingsModal(); };
   rst.style.marginTop = "6px"; rst.style.marginInlineStart = "10px"; c.appendChild(rst);
   sec("Import diagnostics", [["Last full import result", () => { close(); lastFullImport(); }],
     ["Last warehouse import result", () => { close(); showImportReceipt("wh", "Last warehouse import result"); }],

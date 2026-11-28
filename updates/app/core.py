@@ -147,7 +147,7 @@ STATUSES = ["Delivered", "Cancelled", "Unsettled invoices - delivered", "Replace
 BASE = ["ID", "Invoice Number", "Invoice Date", "Sales Order No", "Customer Name",
         "Invoice Value", "Sales Taker", "Invoice Status", "District", "Forward To",
         "Invoice Type", "Payment Terms", "Brand Name", "Car No", "Driver name",
-        "Distribution Rep", "Distribution Rep1", "Distributed Date", "Line",
+        "Distribution Rep", "Distribution Rep1", "Distributed Date", "Line", "Version",
         "Transfer from", "Remarks", "Field1", "Return Value", "Field2", "Expected Date",
         "Purchase Order NO", "Collected Date", "Collected Fees", "Document Deliver Date",
         "Date required", "Field5", "Cost Date Required", "Cost Date", "F34",
@@ -161,28 +161,29 @@ LIST_FIELDS = {"Customer Name": "customers", "Transfer from": "customers",
                "District": "district", "Forward To": "forward_to",
                "Invoice Type": "invoice_type", "Payment Terms": "payment_terms",
                "Brand Name": "brand", "Car No": "car_no", "Driver name": "drivers",
-               "Distribution Rep": "reps", "Distribution Rep1": "reps", "Line": "line"}
+               "Distribution Rep": "reps", "Distribution Rep1": "reps", "Line": "line", "Version": "version"}
 DRIVERS = []
 REPS = []
 FORWARD_TO = []
 INV_TYPES = ["RGR", "Transfer", "D/RE-PACKING", "JOURNAL Transfer", 
              "Commercial Invoice", "RETURN LIST", "Purchase order", "External Order"]
 PAY_TERMS = ["FREE", "Management", "Reduce from Credit Account"]
-DEFAULT_LISTS = {"drivers": DRIVERS, "reps": REPS, "line": ["1", "2", "3", "4", "5"],
+VERSIONS = ["V%d" % i for i in range(1, 11)]
+DEFAULT_LISTS = {"drivers": DRIVERS, "reps": REPS, "line": ["1", "2", "3", "4", "5"], "version": VERSIONS,
                  "forward_to": FORWARD_TO, "invoice_type": INV_TYPES}
 LISTS, CD_MAP = {}, {}
 ACCENT, ACCENT_2, ACCENT_3 = "#0f4c81", "#2b6cb0", "#1e4e8c"
 SIDE_PAL = {"light": dict(home="#e2e8f0", search="#dbeafe", new="#dcfce7", und="#ffedd5", details="#ede9fe", rep="#fce7f3", wh="#cffafe", rgr="#fef9c3"),
             "dark": dict(home="#334155", search="#1e3a8a", new="#14532d", und="#7c2d12", details="#4c1d95", rep="#831843", wh="#164e63", rgr="#713f12")}
 SIDE_FG = {"light": "#1e293b", "dark": "#f1f5f9"}
-APP_VERSION = "v8.183.38"
+APP_VERSION = "v8.193.39"
 VERSION = APP_VERSION + (" Replica" if REPLICA else " Main")
 CREDIT = "\u00a9 2026 Distribution Program. All rights reserved.   |   Made by Eng. Kirollos William"
 MAX_ROWS = 1200   # a screen never loads more than this (keeps every tab fast); the newest rows are shown
 DATE_COLS = {"Invoice Date", "Distributed Date", "Expected Date", "Collected Date", "Document Deliver Date",
              "Date required", "Cost Date Required", "Cost Date"}
 REP_COLS = ["Invoice Number", "Invoice Date", "Customer Name", "District", "Invoice Value", "Distributed Date",
-            "Driver name", "Car No", "Line", "Remarks"]
+            "Driver name", "Car No", "Line", "Version", "Remarks"]
 EXEMPT = {"Undelivered", "inprocess", "Proposal", "Pending"}   # no current-month limit
 SIGNATURE = "Designed & developed by Eng. Kirollos William \u00a9 2026"
 ACK = 'أقر أنا الموقّع أدناه بأنني استلمت الفواتير المبيّنة في هذا الكشف سليمة وكاملة، وأتعهد بتسليمها إلى العملاء وتحصيل قيمتها. كما ألتزم، بعد توقيع العملاء عليها، بتوريد المبالغ والمستندات إلى إدارة التوزيع في الموعد المحدد، وأتحمل المسؤولية الكاملة عن أي عجز أو فقد أو تأخير.'
@@ -887,12 +888,12 @@ def route_widths(rows):
     return [30,*widths,539-30-sum(widths)]
 
 
-def make_route_pdf(path, title, date, driver, car, line, rows, printed, include_ack=None):
+def make_route_pdf(path, title, date, driver, car, line, rows, printed, include_ack=None, version=""):
     if include_ack is None:
         include_ack = title.strip().casefold() not in {"proposal", "proposal report"}
     reps=", ".join(sorted({str(d.get("Distribution Rep", "")).strip() for d in rows if str(d.get("Distribution Rep", "")).strip()})) or "-"
     info = [[f"Distributed Date: {date}", f"Driver Name: {driver or '-'}", f"Car No: {car or '-'}"],
-            [f"Printed: {printed}", f"Rep Name: {reps}", f"Line: {line or '-'}"]]
+            [f"Printed: {printed}", f"Rep Name: {reps}", f"Line: {line or '-'}   Version: {version or '-'}"]]
     tree = {}
     for d in rows:
         tree.setdefault(d.get("District") or "-", {}).setdefault(d.get("Customer Name") or "-", []).append(d)

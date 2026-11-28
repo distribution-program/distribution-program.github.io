@@ -7,23 +7,33 @@ const PREFS_KEY = "ut_view_v1";
 const DEFAULT_COLS = ["ID", "Invoice Number", "Invoice Date", "Sales Order No", "Customer Name",
   "Invoice Value", "Sales Taker", "Invoice Status", "District", "Forward To", "Invoice Type",
   "Payment Terms", "Brand Name", "Car No", "Driver name", "Distribution Rep", "Distribution Rep1",
-  "Distributed Date", "Line", "Transfer from", "Remarks", "Field1", "Return Value", "Field2",
+  "Distributed Date", "Line", "Version", "Entered By", "Delivered By", "Delivered At", "Transfer from", "Remarks", "Field1", "Return Value", "Field2",
   "Expected Date", "Purchase Order NO", "Collected Date", "Collected Fees", "Document Deliver Date",
   "Date required", "Field5", "Cost Date Required", "Cost Date", "F34"];
-let PREFS = { cols: null, lang: "en", fs: "m", dens: "cozy", layout: 2 };
+const AUDIT_COLS = ["Entered By", "Delivered By", "Delivered At"];
+const EDIT_COLS = DEFAULT_COLS.filter(c => !AUDIT_COLS.includes(c));   // audit columns are system-set, never typed
+const DETAIL_COLS = DEFAULT_COLS;
+let PREFS = { cols: null, lang: "en", fs: "m", dens: "cozy", layout: 4, order: null };
 try {
   const p = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
   PREFS = Object.assign(PREFS, p);
   // One-time correction of the old seven-column/reordered layout only.
-  if (p.layout !== 2) { PREFS.cols = null; PREFS.layout = 2; }
+  if (p.layout !== 2 && p.layout !== 3 && p.layout !== 4) { PREFS.cols = null; PREFS.layout = 4; }
+  // Layout 3: a customized column list gets Delivered By / Delivered At added once at the end.
+  else if (p.layout !== 4) { PREFS.layout = 4; if (Array.isArray(PREFS.cols)) for (const c of ["Version", "Entered By", "Delivered By", "Delivered At"]) if (!PREFS.cols.includes(c)) PREFS.cols.push(c); }
 } catch (e) { /* fresh prefs */ }
 function savePrefs() { localStorage.setItem(PREFS_KEY, JSON.stringify(PREFS)); }
 savePrefs();
 function canonicalCols(allCols) {
-  return DEFAULT_COLS.filter(c => allCols.includes(c)).concat(allCols.filter(c => !DEFAULT_COLS.includes(c)));
+  // A column order the user saved in Settings wins; columns it does not know yet follow the default order.
+  const base = DETAIL_COLS.filter(c => allCols.includes(c)).concat(allCols.filter(c => !DETAIL_COLS.includes(c)));
+  if (!Array.isArray(PREFS.order)) return base;
+  const mine = PREFS.order.filter(c => allCols.includes(c));
+  return mine.concat(base.filter(c => !mine.includes(c)));
 }
+function canonicalColsDefault(allCols) { return DETAIL_COLS.filter(c => allCols.includes(c)).concat(allCols.filter(c => !DETAIL_COLS.includes(c))); }
 function visibleColIdx(allCols) {
-  const names = PREFS.cols === null ? DEFAULT_COLS : PREFS.cols;
+  const names = PREFS.cols === null ? DETAIL_COLS : PREFS.cols;
   return canonicalCols(allCols).filter(c => names.includes(c)).map(c => allCols.indexOf(c));
 }
 
@@ -64,7 +74,7 @@ const DICT = {
   "Forward To": "توجيه إلى", "Invoice Type": "نوع الفاتورة", "Payment Terms": "شروط الدفع",
   "Brand Name": "اسم البراند", "Car No": "رقم السيارة", "Driver name": "اسم السائق",
   "Distribution Rep": "مندوب التوزيع", "Distribution Rep1": "مندوب التوزيع 1",
-  "Distributed Date": "تاريخ التوزيع", "Line": "الخط", "Transfer from": "تحويل من",
+  "Distributed Date": "تاريخ التوزيع", "Line": "الخط", "Version": "الفيرجن", "Transfer from": "تحويل من",
   "Remarks": "ملاحظات", "Field1": "Field1", "Return Value": "قيمة المرتجع", "Field2": "Field2",
   "Expected Date": "التاريخ المتوقع", "Purchase Order NO": "رقم أمر الشراء",
   "Collected Date": "تاريخ التحصيل", "Collected Fees": "الرسوم المحصّلة",

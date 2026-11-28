@@ -210,9 +210,9 @@ function editAllFields() {
   const form = el("div", "form-grid");
   form.style.cssText = "display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-height:60vh;overflow:auto;padding:8px";
   const inputs = {}, original = {};
-  for (const name of DEFAULT_COLS) {
+  for (const name of EDIT_COLS) {
     const field = el("div", "fld"); field.appendChild(el("label", null, name));
-    const combo = name !== "Invoice Status" && S.listFields[name] ? autoCombo({autoNearest:name==="Customer Name",getvals:()=>listFor(name,inputs["Customer Name"]?.value||record.v[S.cols.indexOf("Customer Name")])}) : null;
+    const combo = name !== "Invoice Status" && S.listFields[name] ? autoCombo({autoNearest:name==="Customer Name",readonlyList:name==="Version",getvals:()=>listFor(name,inputs["Customer Name"]?.value||record.v[S.cols.indexOf("Customer Name")])}) : null;
     const input = combo ? combo.input : el(name === "Invoice Status" ? "select" : "input", "in"); input.dataset.field = name;
     const value = record.v[S.cols.indexOf(name)] || "";
     if (name === "Invoice Status") {
@@ -229,12 +229,12 @@ function editAllFields() {
   if(recovery)for(const [name,value]of Object.entries(recovery))if(inputs[name])inputs[name].value=value;
   const autoHint=recoveredHint(content,"Changes save locally as you type. Invalid values stay as recoverable input, not invoice changes.");
   let autoTimer,autoQueue=Promise.resolve(),closing=false;
-  const allValues=()=>Object.fromEntries(DEFAULT_COLS.map(n=>[n,inputs[n].value]));
-  const pendingValues=()=>Object.fromEntries(DEFAULT_COLS.filter(n=>inputs[n].value!==original[n]).map(n=>[n,inputs[n].value]));
+  const allValues=()=>Object.fromEntries(EDIT_COLS.map(n=>[n,inputs[n].value]));
+  const pendingValues=()=>Object.fromEntries(EDIT_COLS.filter(n=>inputs[n].value!==original[n]).map(n=>[n,inputs[n].value]));
   const autoSave=()=>{
     clearTimeout(autoTimer);const values=allValues();draftWrite("edit:"+record.uid,pendingValues());
     autoQueue=autoQueue.catch(()=>{}).then(async()=>{
-      const changes={};for(const name of DEFAULT_COLS)if(values[name]!==original[name])changes[name]=values[name];
+      const changes={};for(const name of EDIT_COLS)if(values[name]!==original[name])changes[name]=values[name];
       if(changes["Invoice Status"]==="Cancelled"&&original["Invoice Status"]!=="Cancelled")delete changes["Invoice Status"];
       if(!Object.keys(changes).length)return;
       const a=await api("/api/edit/all",{uid:record.uid,changes});
@@ -251,7 +251,7 @@ function editAllFields() {
   save.onclick = async () => {
     clearTimeout(autoTimer);await autoSave();
     const changes = {};
-    for (const name of DEFAULT_COLS) if (inputs[name].value !== original[name]) changes[name] = inputs[name].value;
+    for (const name of EDIT_COLS) if (inputs[name].value !== original[name]) changes[name] = inputs[name].value;
     if (!Object.keys(changes).length) {draftDrop("edit:"+record.uid);close();await fillDetails();return;}
     let reason = "";
     if (changes["Invoice Status"] === "Cancelled" && original["Invoice Status"] !== "Cancelled") {
@@ -298,7 +298,7 @@ function bulkEdit() {
     f.appendChild(el("label", null, col));
     let w;
     if (col === "Invoice Status") w = autoCombo({ getvals: () => [""].concat(S.statuses), readonlyList: false });
-    else if (listFor(col)) w = autoCombo({ getvals: () => listFor(col) });
+    else if (listFor(col)) w = autoCombo({ readonlyList: col === "Version", getvals: () => listFor(col) });
     else w = { input: el("input", "in"), val() { return this.input.value; } };
     f.appendChild(w.isAc ? w.input.parentElement : w.input);
     ws[col] = w;
@@ -346,8 +346,8 @@ async function districtReminder(ids) {
         const form=el("div");form.appendChild(el("h2",null,"Add invoice to dispatch"));form.appendChild(el("p",null,`${x.customer} | ${x.invoice} | ${status.value}`));
         form.appendChild(el("p","hint","Enter the dispatch details for this invoice. Nothing is saved until you confirm."));
         const grid=el("div","mgrid"),inputs={};form.appendChild(grid);
-        for(const [field,label]of [["Car No","Vehicle (Car No)"],["Driver name","Driver name"],["Line","Line"],["Distributed Date","Distributed Date (DD/MM/YYYY)"]]){
-          const f=el("div","fld"),i=el("input","in");i.dataset.districtField=field;i.placeholder=label;f.append(el("label",null,label),i);grid.appendChild(f);inputs[field]=i;
+        for(const [field,label]of [["Car No","Vehicle (Car No)"],["Driver name","Driver name"],["Line","Line"],["Version","Version (V1 to V10)"],["Distributed Date","Distributed Date (DD/MM/YYYY)"]]){
+          const f=el("div","fld"),i=field==="Version"?el("select","in"):el("input","in");if(field==="Version"){for(const v of [""].concat(S.lists.version||[])){const o=el("option",null,v);o.value=v;i.appendChild(o);}}i.dataset.districtField=field;i.placeholder=label;f.append(el("label",null,label),i);grid.appendChild(f);inputs[field]=i;
         }
         const actions=el("div","mrow"),cancel=el("button","btn","Cancel"),confirm=el("button","btn accent","Confirm Add");actions.append(cancel,confirm);form.appendChild(actions);
         const prompt=modal(form,"650px");prompt.ov.dataset.dismiss="no";cancel.onclick=prompt.close;

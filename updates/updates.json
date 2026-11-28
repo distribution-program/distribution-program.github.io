@@ -1,7 +1,7 @@
 {
  "format": 1,
- "version": "v8.183.38",
- "notes": "Notifications: hovering marks one row per mouse movement. Closing the window syncs then ends the program fully.",
+ "version": "v8.193.39",
+ "notes": "Version column (V1 to V10, required for Proposal and In Process), Version in reports and printing, Entered By / Delivered By / Delivered At next to it, reorder table columns from Settings.",
  "files": {
   "app/access_control.py": {
    "sha256": "a2d21ffde045f2ea539d8d36887612adbc6afa912f3e8a938da1e4d73754517d",
@@ -20,8 +20,8 @@
    "size": 2503
   },
   "app/core.py": {
-   "sha256": "ffaa9dbddd2872567626f2df1cd35e8de13f5c6576df5921de0e5235990ea105",
-   "size": 54767
+   "sha256": "2b08150928e2544cc49a00cf97231b280576e2f54392777e23e960e9d5824f39",
+   "size": 54917
   },
   "app/customer.py": {
    "sha256": "8f7f8305a81c396773d21d2aba250773171723be3802e0f394b55ef4eddb3e5b",
@@ -104,24 +104,24 @@
    "size": 4136
   },
   "app/server.py": {
-   "sha256": "6f4783c462ce60f9661a55e3464c2f54956a1662f08f0de05f0d18a4d1520581",
-   "size": 143218
+   "sha256": "149c498e491ed7069c87cc4a7ceb94fa0fae0b97b99422a9194bfb56611e357c",
+   "size": 144657
   },
   "app/static/app.css": {
    "sha256": "af4b42c6ede64ed9ad4f518995dc89fdef836adb91cd94eea31b93b74b4148cd",
    "size": 24538
   },
   "app/static/boot.js": {
-   "sha256": "53a8cfb71d41a4c9e078bd0aec8084c32ee2e3a537fa4cc4a4a2e6da6e4aec19",
-   "size": 54599
+   "sha256": "8a6e8ab0bb251be93c04694336eaab45b3c096af9e745817a60e125c2b7d276f",
+   "size": 55246
   },
   "app/static/c1.js": {
    "sha256": "26a745cb8ba39b70d239db981029f9afbb15bf5007f28bd7487c4868f374451a",
    "size": 11449
   },
   "app/static/c2.js": {
-   "sha256": "c171159fcb288ce8c4eff5af47ef66253b0b47ff64494a267fca620192b37d4a",
-   "size": 11531
+   "sha256": "13c637d32f226c8eedb7e20f77e6dec3298c8cae21dc0f0ce7afefc5e495710c",
+   "size": 11564
   },
   "app/static/delivery.js": {
    "sha256": "d8f10becfd7de88058a194f482ccfc8c5590ad5c735b18c079fd85973e28e078",
@@ -160,8 +160,8 @@
    "size": 9864
   },
   "app/static/prefs.js": {
-   "sha256": "1c18525e0495904fe7caa6dbb85601bf3b3e1ccc3317688090254c5afe370c28",
-   "size": 12227
+   "sha256": "525c63efb2072500524b855e0fa606f129c8b10c473fb73406bbf31b3481e1df",
+   "size": 13308
   },
   "app/static/qrcode.js": {
    "sha256": "79ec86f82856005b1c887905cfccfcfbec3821ca61c7fd5a952faa5f778f791c",
@@ -180,16 +180,16 @@
    "size": 3257
   },
   "app/static/v1.js": {
-   "sha256": "77278df1316a12b9f02559dc3e8995768c96f247344f05dbfb2eb67e2bf1fe8f",
-   "size": 23766
+   "sha256": "f5f3805383a59987e0f2a68444b95c8b614f6dd060d970ece9b73e7d2fc14db1",
+   "size": 24012
   },
   "app/static/v2.js": {
-   "sha256": "c445c44ef5090b972f60d5d9db08eff64d551cd1b96606628ae2ccc4c1726c45",
-   "size": 33705
+   "sha256": "c233b95233eb9572402e78f42b0089b7971aa7c46efe506c3e5f4163a67a778e",
+   "size": 34174
   },
   "app/static/v54.js": {
-   "sha256": "23d681d30b467cb6324f120d5bc2b22977471cd048e9491596f9df44194e0484",
-   "size": 23918
+   "sha256": "ffab8c503410b6f023e35ccb7635e346090e977cebbb205231cad12c89f71ac3",
+   "size": 23934
   },
   "app/static/whatsnew.js": {
    "sha256": "ce7431336592f7fd30201be453089c1d6d0aa0b7d9f58c401ee3cf70f1f468ac",

@@ -256,6 +256,9 @@ def apply_invoice_changes(uid, changes, reason=""):
                 history=list(d.get("_date_raw_history",[]))
                 history.append({"field":name,"raw":d[name],"replaced_at":time.time()})
                 d["_date_raw_history"]=history
+        _nd = dict(d); _nd.update(edits)
+        _vp = version_problem(docs[uid], _nd)
+        if _vp: return {"ok": False, "msg": _vp}
         if identity != str(d.get("ID", "")):
             try:ID_SERVICE.claim(identity,uid)
             except Exception as error:return {"ok":False,"msg":str(error)}
@@ -265,6 +268,17 @@ def apply_invoice_changes(uid, changes, reason=""):
             with_reason(d, reason.strip())
         save_doc(uid, d)
         return {"ok": True, "msg": "Invoice saved. Internal sync identity unchanged."}
+
+
+VERSIONS = core.VERSIONS
+def version_problem(old, new):
+    """Version is chosen from V1..V10. It is mandatory when an invoice enters Proposal or In Process."""
+    v = str(new.get("Version", "") or "").strip()
+    if v and v not in VERSIONS: return "Version must be chosen from V1 to V10. Nothing was changed."
+    st = new.get("Invoice Status")
+    if st in ("Proposal", "inprocess") and not v and (old is None or old.get("Invoice Status") != st or str(old.get("Version", "") or "").strip()):
+        return "Choose Version (V1 to V10) before an invoice goes to Proposal or In Process. Nothing was changed."
+    return ""
 
 
 def with_reason(d, reason):
@@ -642,10 +656,12 @@ def lic_full():
 
 def route_match(f):
     car, line, drv = f.get("car", "").strip().lower(), f.get("line", "").strip(), f.get("drv", "").strip().lower()
+    ver = f.get("ver", "").strip()
     day = pdate(f.get("date", ""))
     return lambda d: ((not day or pdate(d.get("Distributed Date")) == day)
                       and (not car or str(d.get("Car No", "")).strip().lower() == car)
                       and (not line or str(d.get("Line", "")).strip() == line)
+                      and (not ver or str(d.get("Version", "")).strip() == ver)
                       and (not drv or str(d.get("Driver name", "")).strip().lower() == drv))
 
 
@@ -1442,10 +1458,11 @@ def pdf_route(rep_title, rep_status, f, save_only=False):
                 out_uids.add(uid)
     for uid,row in zip(uids,rows):row['_review_out']=uid in out_uids
     drv, car, line = f.get("drv", "").strip(), f.get("car", "").strip(), f.get("line", "").strip()
-    name = f"{(drv.split()[0] if drv else 'NODRIVER').upper()}-{car or 'X'}-{line or 'X'}.pdf"
+    ver = f.get("ver", "").strip()
+    name = f"{(drv.split()[0] if drv else 'NODRIVER').upper()}-{car or 'X'}-{line or 'X'}" + (f"-{ver}" if ver else "") + ".pdf"
     path = unique_path(os.path.join(desktop(), re.sub(r'[\\/:*?"<>|\s]+', "_", name)))
     try:
-        core.make_route_pdf(path, rep_title, f.get("date", ""), drv, car, line, rows, now_str(), include_ack=rep_status != "Proposal")
+        core.make_route_pdf(path, rep_title, f.get("date", ""), drv, car, line, rows, now_str(), include_ack=rep_status != "Proposal", version=ver)
     except Exception as e:
         return {"ok": False, "msg": f"PDF error: {e}"}
     if save_only:
@@ -1768,7 +1785,7 @@ LIST_NAMES = lambda: sorted(set(LIST_FIELDS.values()) | {"customer_district"})
 NEW_REQUIRED = ["Invoice Number", "Invoice Status", "District", "Forward To", "Invoice Type", "Payment Terms",
                 "Brand Name"]
 BULK_FIELDS = ["Invoice Status", "District", "Forward To", "Invoice Type", "Payment Terms", "Brand Name", "Car No",
-               "Driver name", "Distribution Rep", "Distribution Rep1", "Distributed Date", "Line"]
+               "Driver name", "Distribution Rep", "Distribution Rep1", "Distributed Date", "Line", "Version"]
 
 
 class Hdl(BaseHTTPRequestHandler):
@@ -1996,7 +2013,7 @@ class Hdl(BaseHTTPRequestHandler):
             if path=="/api/review/open":return open_plan(b.get("key"))
             if path=="/api/review/save":return save(b,u)
         if path == "/api/delivery/batch":
-            ids=b.get("uids",[]);allowed={"Invoice Status","Car No","Driver name","Distribution Rep","Distributed Date","Line"}
+            ids=b.get("uids",[]);allowed={"Invoice Status","Car No","Driver name","Distribution Rep","Distributed Date","Line","Version"}
             changes={k:str(v).strip() for k,v in b.get("changes",{}).items() if k in allowed and str(v).strip()}
             if not ids or len(set(ids))!=len(ids) or not changes:return {"ok":False,"msg":"Select invoices and enter changes."}
             if changes.get("Invoice Status","Undelivered") not in {"Undelivered","inprocess","Proposal"}:return {"ok":False,"msg":"Invalid dispatch status."}
@@ -2007,6 +2024,9 @@ class Hdl(BaseHTTPRequestHandler):
                 for uid in ids:
                     d=docs.get(uid)
                     if not d or d.get("Invoice Status")!="Undelivered" or d.get("updated")!=b.get("expected",{}).get(uid):return {"ok":False,"msg":"An invoice changed since selection. Refresh and select again. Nothing changed."}
+                for uid in ids:
+                    _vp=version_problem(docs[uid],dict(docs[uid],**changes))
+                    if _vp:return {"ok":False,"msg":_vp}
                 for uid in ids:save_doc(uid,dict(docs[uid],**changes))
             return {"ok":True,"msg":str(len(ids))+" selected invoices updated."}
         if path == "/api/desktop/shortcut":
@@ -2260,6 +2280,10 @@ class Hdl(BaseHTTPRequestHandler):
             if ch.get("Invoice Status") == "Cancelled" and not reason:
                 return {"ok": False, "need_reason": True}
             for uid in ids:
+                if uid in docs:
+                    _vp = version_problem(docs[uid], dict(docs[uid], **ch))
+                    if _vp: return {"ok": False, "msg": _vp}
+            for uid in ids:
                 if uid not in docs:
                     continue
                 d = dict(docs[uid])
@@ -2286,6 +2310,8 @@ class Hdl(BaseHTTPRequestHandler):
                 if g.get(c):
                     try:g[c] = core.manual_date_text(g[c])
                     except ValueError:return {"ok":False,"field":c,"msg":c+": enter a valid DD/MM/YYYY date (optional HH:MM:SS). Nothing was changed."}
+            _vp = version_problem(None, g)
+            if _vp: return {"ok": False, "msg": _vp}
             if g["Invoice Status"] == "Cancelled":
                 reason = b.get("reason", "").strip()
                 if not reason:
