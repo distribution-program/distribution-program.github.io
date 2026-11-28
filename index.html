@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Distribution Program</title>
+<meta name="description" content="Distribution Program for Windows: invoices, delivery follow-up, reports, cash and expenses in one place.">
+<style>
+:root{--navy:#0b2447;--blue:#19376d;--orange:#ff8a1f;--ink:#e8eefc;--card:#13305f}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Tahoma,Arial,sans-serif;background:var(--navy);color:var(--ink);line-height:1.55}
+a{color:inherit}.wrap{max-width:1080px;margin:auto;padding:0 20px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.logo{font-weight:800;font-size:20px;letter-spacing:.3px}.logo b{color:var(--orange)}
+.lang{background:transparent;border:1px solid #4a67a3;color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.hero{text-align:center;padding:48px 0 28px}.hero h1{font-size:42px;margin:0 0 12px;line-height:1.15}
+.hero p{font-size:18px;color:#c3d1f0;max-width:680px;margin:0 auto 24px}
+.btn{display:inline-block;background:var(--orange);color:#1b1100;font-weight:800;font-size:19px;padding:14px 30px;border-radius:12px;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}.meta{margin-top:14px;color:#9fb4e0;font-size:14px}
+.shot{margin:30px auto 10px;max-width:960px;border-radius:12px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid #2c4a85}
+.shot img{display:block;width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:30px 0}
+.card{background:var(--card);border-radius:14px;padding:18px;border:1px solid #24427c}
+.card h3{margin:0 0 6px;color:var(--orange);font-size:17px}.card p{margin:0;color:#c3d1f0;font-size:15px}
+h2{text-align:center;font-size:28px;margin:40px 0 8px}
+.pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:20px 0}
+.pics figure{margin:0;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid #24427c}
+.pics img{width:100%;display:block}.pics figcaption{padding:10px 14px;font-size:14px;color:#c3d1f0}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:20px 0}
+.steps div{background:var(--card);border-radius:14px;padding:18px 18px 18px 58px;position:relative;border:1px solid #24427c}
+.steps div:before{counter-increment:s;content:counter(s);position:absolute;left:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--orange);color:#1b1100;font-weight:800;text-align:center;line-height:30px}
+.band{background:linear-gradient(120deg,#19376d,#0f2a57);border:1px solid #2c4a85;border-radius:18px;padding:32px;text-align:center;margin:40px 0}
+.note{font-size:14px;color:#9fb4e0;margin-top:10px}
+footer{text-align:center;color:#8aa0cf;padding:26px 0 40px;font-size:14px}footer .contact{margin-top:10px;font-size:16px}footer a{color:var(--orange);font-weight:700;text-decoration:none}
+[dir=rtl] .steps div{padding:18px 58px 18px 18px}[dir=rtl] .steps div:before{left:auto;right:16px}
+.ar{display:none}html[lang=ar] .en{display:none}html[lang=ar] .ar{display:revert}
+.btn{min-width:260px;text-align:center;margin:6px 4px}
+@media(max-width:600px){.btn{display:block;width:100%;min-width:0;margin:10px 0}}
+.news{margin:20px 0}.news .rel{background:var(--card);border:1px solid #24427c;border-radius:14px;padding:18px 20px;margin:0 0 14px}.news .rel h3{margin:0 0 4px;color:var(--orange);font-size:18px}.news .rel .d{font-size:13px;color:#9fb4e0;margin-bottom:8px}.news ul{margin:0;padding-inline-start:20px;color:#c3d1f0;font-size:15px}.news li{margin:4px 0}
+</style></head><body>
+<div class="wrap">
+<header><div class="logo">Distribution <b>Program</b></div><button class="lang" id="lang">العربية</button></header>
+
+<section class="hero">
+<h1><span class="en">Run your whole distribution in one place</span><span class="ar">شغّل التوزيع كله من مكان واحد</span></h1>
+<p><span class="en">Invoices, delivery follow-up, reports, cash and expenses. One Windows program, live sync between devices, English and Arabic.</span><span class="ar">فواتير، متابعة التسليم، تقارير، كاش ومصروفات. برنامج واحد على ويندوز، مزامنة مباشرة بين الأجهزة، عربي وإنجليزي.</span></p>
+<a class="btn" href="download/Distribution-Program-Trial-v8.153.35-Setup.exe" download><span class="en">Download installer version</span><span class="ar">حمل نسخة التثبيت</span></a> <a class="btn" href="download/Distribution-Program-Trial-v8.153.35-Portable.zip" download><span class="en">Download portable version</span><span class="ar">حمل نسخة بدون تثبيت</span></a>
+<div class="meta"><span class="en">Version 8.153.35 &middot; trial: 50 operations in total (each add or delete counts as one; editing is free; after the 50 the program is read and print only until you enter a license) &middot; installer or portable, no admin rights &middot; one-button updates in the full version</span><span class="ar">النسخة 8.153.35 &middot; التجربة: 50 عملية إجمالا (كل إضافة أو حذف = عملية، والتعديل مجاني، وبعد الـ 50 البرنامج قراءة وطباعة بس لحد ما تدخل ترخيص) &middot; بتثبيت أو من غير تثبيت، ومن غير صلاحيات أدمن</span></div>
+<div class="shot"><img src="img/home.jpg" alt="Program home screen"></div>
+</section>
+
+<h2 id="news"><span class="en">What's New</span><span class="ar">الجديد</span></h2>
+<div class="news">
+<div class="rel"><h3>v8.153.35</h3><div class="d"><span class="en">28 Nov 2026</span><span class="ar">٢٨ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Driver Deliveries now updates by itself while it is open: when a driver marks an invoice delivered on the phone, the numbers and the driver's list change within a few seconds, with no need to leave and re-enter.</span><span class="ar">شاشة Driver Deliveries بقت بتتحدث لوحدها وهي مفتوحة: لما السواق يعلّم فاتورة تم تسليمها من الموبايل، الأرقام وقايمة السواق بتتغير في ثواني من غير ما تخرج وتدخل.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.143.34</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: in the cloud-connected version, saving a new invoice could freeze the program for good if it happened at the same moment as a cloud sync. Nothing else changed.</span><span class="ar">تم الإصلاح: في النسخة المتصلة بالسحابة، حفظ فاتورة جديدة كان ممكن يعلّق البرنامج لو حصل في نفس لحظة مزامنة السحابة. ومفيش أي حاجة تانية اتغيرت.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.133.33</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Phone app company code: the Web API key, company name, code and QR are now saved and shown again every time the screen is opened.</span><span class="ar">كود الشركة لتطبيق الموبايل: مفتاح Web API واسم الشركة والكود والـ QR بقوا بيتحفظوا وبيظهروا تاني كل ما تفتح الشاشة.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.123.32</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Firebase connection start-up now also tries the Windows trusted certificates (needed when an antivirus inspects secure connections) and other safe network settings, each tested in a separate short process. The first one that works is used. If none works, the program still opens without Firebase and boot.log records the reason.</span><span class="ar">بدء اتصال Firebase بقى بيجرب كمان شهادات ويندوز الموثوقة (مطلوبة لما مضاد الفيروسات بيفحص الاتصالات الآمنة) وإعدادات شبكة آمنة تانية، كل واحدة في عملية منفصلة قصيرة. أول واحدة تنجح بتتستخدم. ولو مفيش واحدة نجحت البرنامج لسه بيفتح من غير Firebase وboot.log بيسجل السبب.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.113.31</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: the program could close at startup on some Windows PCs once a Firebase key file was added. The Firebase connection set-up is now tested first in a separate short process (with an alternative network setting if it crashes). If it still fails, the program opens without Firebase and writes the reason in boot.log.</span><span class="ar">تم الإصلاح: البرنامج كان ممكن يقفل عند التشغيل على بعض أجهزة ويندوز بعد إضافة ملف مفتاح Firebase. دلوقتي بيتم تجربة إعداد اتصال Firebase الأول في عملية منفصلة قصيرة (ومعاها إعداد شبكة بديل لو انهارت). ولو لسه فشلت البرنامج بيفتح من غير Firebase ويكتب السبب في boot.log.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.103.30</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: the program could close at startup after a Firebase key file was added. The Firebase start-up is now checked first in a separate short process; if it fails, the program opens without Firebase and writes the reason in boot.log.</span><span class="ar">تم الإصلاح: البرنامج كان ممكن يقفل عند التشغيل بعد إضافة ملف مفتاح Firebase. دلوقتي بيتم فحص تشغيل Firebase الأول في عملية منفصلة قصيرة، ولو فشل البرنامج بيفتح من غير Firebase ويكتب السبب في boot.log.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.093.29</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: after a Firebase key file was added, the program could stay stuck at startup and never open. The Firebase libraries now load in the background (waiting at most 25 seconds), so the program always opens, and they are prepared for the next start.</span><span class="ar">تم الإصلاح: بعد إضافة ملف مفتاح Firebase كان البرنامج ممكن يفضل عالق عند التشغيل ومايفتحش. دلوقتي مكتبات Firebase بتتحمل في الخلفية (بحد أقصى 25 ثانية) فالبرنامج بيفتح دايما، وبتتجهز للتشغيل الجاي.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.083.28</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Added a startup trace (boot.log) in the program data folder to find why the program may not open after a Firebase key file is added. If Restart now cannot reopen the program, it now stays open and tells you to reopen it from its icon.</span><span class="ar">تمت إضافة سجل بدء التشغيل (boot.log) في فولدر بيانات البرنامج لمعرفة سبب عدم فتح البرنامج بعد إضافة مفتاح Firebase. ولو زر Restart now مقدرش يفتح البرنامج تاني، البرنامج بيفضل مفتوح ويقولك تفتحه من الأيقونة.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.073.27</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: the second start of the program (from the icon, after closing it) could show a black window that closed at once. The second start now keeps its window open. The program also writes launcher.log in its data folder so any start problem can be traced.</span><span class="ar">تم الإصلاح: التشغيل التاني للبرنامج (من الأيقونة بعد ما تقفله) كان ممكن يطلع شاشة سودا وتقفل على طول. دلوقتي التشغيل التاني بيسيب النافذة مفتوحة. وكمان البرنامج بيكتب ملف launcher.log في فولدر بياناته علشان أي مشكلة في التشغيل تتتبع.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.063.26</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Safety: this public program now always uses its own separate data folder, even if it is started without its launcher.</span><span class="ar">أمان: البرنامج العام ده بقى دايما بيستخدم فولدر بيانات منفصل بتاعه، حتى لو اتشغل من غير الـ launcher.</span></li>
+<li><span class="en">Fixed: starting the program again after it was closed or stopped could show a black window that closes at once. Leftover window processes are cleaned up and, if the native window still fails, the program opens in an Edge or Chrome app window.</span><span class="ar">تم الإصلاح: تشغيل البرنامج تاني بعد ما اتقفل كان ممكن يطلع شاشة سودا وتقفل على طول. دلوقتي بيتم تنضيف عمليات النافذة المتبقية، ولو النافذة الأصلية فشلت البرنامج بيفتح في نافذة Edge أو Chrome.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.053.25</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Fixed: Restart now (after uploading the Firebase key file or an update) could close the program on Windows without opening it again. It now reopens reliably and writes restart.log if anything goes wrong.</span><span class="ar">تم الإصلاح: زر Restart now (بعد رفع ملف مفتاح Firebase أو بعد تحديث) كان ممكن يقفل البرنامج على ويندوز ومايفتحش تاني. دلوقتي بيفتح من جديد بشكل ثابت وبيكتب restart.log لو حصل أي مشكلة.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.043.24</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">The phone app company code now also shows as a QR code. In the phone app (1.4.0) tap Scan QR code and point the camera at the screen. Copy and paste still work.</span><span class="ar">كود الشركة للتطبيق بقى بيظهر كمان كـ QR. في تطبيق الموبايل (1.4.0) دوس Scan QR code ووجّه الكاميرا على الشاشة. النسخ واللصق لسه شغالين.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.033.23</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">The program opens as Guest with limited rights. Use Switch user and sign in as Admi1 (password D123456789D) to set it up.</span><span class="ar">البرنامج بيفتح كـ Guest بصلاحيات محدودة. اضغط تبديل المستخدم وادخل بـ Admi1 (كلمة السر D123456789D) علشان تجهزه.</span></li>
+<li><span class="en">Customer setup inside Settings: add your own administrator, upload your Firebase key file, get the phone app company code. With a Full license and your Firebase project, invoices and users sync to your own cloud between your PCs. Delete Admi1 once your own admin works.</span><span class="ar">تجهيز العميل من الإعدادات: ضيف الأدمن بتاعك، ارفع ملف مفتاح Firebase، واطلع كود الشركة لتطبيق الموبايل. مع ترخيص Full ومشروع Firebase بتاعك، الفواتير والمستخدمين بيتزامنوا على السحابة بتاعتك بين أجهزتك. امسح Admi1 لما الأدمن بتاعك يشتغل.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.023.22</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">With a Full license you can connect your own Firebase project using the Firebase buttons and the wizard. Put your key file next to the program, enter the license and restart once. Invoices stay on this PC for now.</span><span class="ar">مع ترخيص Full تقدر توصّل مشروع Firebase بتاعك بأزرار Firebase والمعالج. حط ملف المفتاح جنب البرنامج، دخّل الترخيص وأعد التشغيل مرة. الفواتير لسه على الجهاز ده.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.013.21</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Licenses made by the Distribution License phone app are accepted too. Older keys keep working.</span><span class="ar">المفاتيح اللي بتتعمل من تطبيق Distribution License على الموبايل بقت بتشتغل كمان. والمفاتيح القديمة لسه شغالة.</span></li>
+</ul></div>
+<div class="rel"><h3>v8.003.20</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">New Enter license button. Send the device code to the developer and paste the key you receive. A license works only on the PC it was made for.</span><span class="ar">زرار جديد Enter license. ابعت كود الجهاز للمطور وحط المفتاح اللي هيوصلك. الترخيص بيشتغل على الجهاز اللي اتعمل له بس.</span></li>
+<li><span class="en">A banner shows how many of the 50 trial operations are left. After the trial the program is read and print only; nothing is deleted.</span><span class="ar">شريط بيوريك فاضل كام عملية من الـ 50. بعد التجربة البرنامج قراءة وطباعة بس ومفيش حاجة بتتمسح.</span></li>
+<li><span class="en">Security: the program answers only requests from the PC it runs on.</span><span class="ar">أمان: البرنامج بيرد على الطلبات اللي جاية من الجهاز اللي شغال عليه بس.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.993.19</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Full version: Driver Deliveries screen to confirm what drivers marked delivered, users with a driver or distribution manager role, and a one-click Firebase setup wizard. These are not available in the trial.</span><span class="ar">النسخة الكاملة: شاشة تسليمات السواقين لتأكيد اللي السواقين علموه تم تسليمه، ومستخدمين بدور سواق أو مدير توزيع، ومعالج إعداد Firebase بضغطة واحدة. مش متاحة في النسخة التجريبية.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.983.18</h3><div class="d"><span class="en">27 Nov 2026</span><span class="ar">٢٧ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Driver tracking: the full version lets you track your drivers, what each one delivered and when (who delivered it and the time are saved on every invoice). Not available in the trial.</span><span class="ar">تتبع السواقين: النسخة الكاملة بتخليك تتابع السواقين، كل واحد سلم إيه وإمتى (اسم اللي سلم ووقت التسليم بيتسجلوا على كل فاتورة). مش متاح في النسخة التجريبية.</span></li>
+<li><span class="en">Trial: the shared folder box is empty and shows it is not available in the trial.</span><span class="ar">النسخة التجريبية: خانة مجلد الشير فاضية ومكتوب إنها مش متاحة في التجريبي.</span></li>
+<li><span class="en">Invoice Details and Invoice Report now open as a full page and Back returns to Home.</span><span class="ar">Invoice Details و Invoice Report بيفتحوا صفحة كاملة و Back بيرجعك لـ Home.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.983.18</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Customize buttons: every button has Move to and an arrow. Put any button inside any other button, at any level, or hide it, and bring it back any time.</span><span class="ar">Customize buttons: كل زرار جمبه Move to وسهم. تدخل أي زرار جوة أي زرار تاني في أي مستوى، أو تخفيه، وترجعه وقت ما تحب.</span></li>
+<li><span class="en">Button size: five sizes for all buttons. New Blank only filter shows rows where a column is empty.</span><span class="ar">حجم الأزرار: خمس أحجام لكل الأزرار. وفلتر جديد Blank only بيعرض الصفوف اللي العمود بتاعها فاضي.</span></li>
+<li><span class="en">Conflict Expenses now works like Conflict Invoices, with Keep Became, Keep Was and Reject.</span><span class="ar">Conflict Expenses بقت زي Conflict Invoices، مع Keep Became وKeep Was وReject.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.943.14</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Notifications move to Earlier as soon as you point at them, and the counter drops at once. New: Mark all as read.</span><span class="ar">الإشعار بينتقل لـ Earlier أول ما تقف عليه بالماوس والعداد بينقص فورا. جديد: Mark all as read.</span></li>
+<li><span class="en">Conflict review: choose which version to keep.</span><span class="ar">مراجعة الكونفليكت: اختار النسخة اللي تفضل.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.923.12</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Notifications no longer miss an Edit when an invoice is added and edited within seconds, or changed while the program was closed.</span><span class="ar">الإشعارات بقت متفوتش التعديل لو الفاتورة اتضافت واتعدلت في ثواني، أو اتغيرت والبرنامج مقفول.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.913.11</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Update and Restore questions now open in the program's own dialog instead of a browser-style box.</span><span class="ar">أسئلة التحديث والاسترجاع بقت بتظهر في نافذة البرنامج نفسه بدل صندوق المتصفح.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.903.10</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">New: a What's New box after login, shown once per version.</span><span class="ar">جديد: نافذة "الجديد" بعد تسجيل الدخول، بتظهر مرة واحدة لكل نسخة.</span></li>
+<li><span class="en">Edit notice shows what a field was and what it became.</span><span class="ar">إشعار التعديل بيوضح كانت إيه وبقت إيه.</span></li>
+<li><span class="en">Update closes the old program and opens the new one by itself.</span><span class="ar">التحديث بيقفل البرنامج القديم ويفتح الجديد لوحده.</span></li>
+<li><span class="en">The program opens only once; if it is open, it comes to the front.</span><span class="ar">البرنامج بيفتح مرة واحدة، ولو مفتوح بيظهر قدامك.</span></li>
+<li><span class="en">Live sync moved to the top, next to the user name. History button removed.</span><span class="ar">Live sync بقى فوق جنب اسم المستخدم، وزرار History اتشال.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.893.9</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Update notice: a green bar appears when a new version is available, with an Open Update button.</span><span class="ar">إشعار التحديث: شريط أخضر بيظهر لما تتوفر نسخة جديدة، وفيه زرار Open Update.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.883.8</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">New: the program can open in its own full-screen window instead of the browser (experimental). If it cannot, it opens as before.</span><span class="ar">جديد: البرنامج ممكن يفتح في نافذة خاصة به ملء الشاشة بدل المتصفح (تجريبي). ولو مقدرش بيفتح زي الأول.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.873.7</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Districts popup: Apply now ticks the chosen districts in the list, so Edit selected is ready. The tick boxes are also more reliable.</span><span class="ar">نافذة Districts: زرار Apply دلوقتي بيعلّم المناطق اللي اخترتها في القايمة، فـ Edit selected يبقى جاهز. وخانات التحديد بقت أثبت.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.863.6</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">Settings: the long Table columns list is now one button that opens a popup. Tick the columns you want, then Save.</span><span class="ar">الإعدادات: قايمة أعمدة الجدول الطويلة بقت زرار واحد بيفتح نافذة. اختار الأعمدة وبعدين Save.</span></li>
+<li><span class="en">Districts popup: new Select all button.</span><span class="ar">نافذة Districts: زرار Select all جديد.</span></li>
+<li><span class="en">The program window always opens full screen.</span><span class="ar">نافذة البرنامج بتفتح دايماً ملء الشاشة.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.853.5</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">District &amp; Customer Review: one Clear search button instead of two.</span><span class="ar">مراجعة المنطقة والعميل: زرار Clear search واحد بدل اتنين.</span></li>
+<li><span class="en">New Districts filter: pick several districts at once and see only those.</span><span class="ar">فلتر Districts جديد: اختار كذا منطقة مع بعض وشوف دول بس.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.843.4</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">The installer now closes the running program before updating its files.</span><span class="ar">المثبّت دلوقتي بيقفل البرنامج الشغال قبل ما يحدّث ملفاته.</span></li>
+<li><span class="en">Trial edition: printing, choosing a shared folder and restoring a backup now work (the 50-operation limit still applies).</span><span class="ar">النسخة التجريبية: الطباعة واختيار الفولدر المشترك واسترجاع النسخة الاحتياطية بقوا شغالين (حد الـ 50 عملية زي ما هو).</span></li>
+</ul></div>
+<div class="rel"><h3>v7.833.3</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">The program window in the Windows taskbar now shows the same D icon as the program.</span><span class="ar">نافذة البرنامج في شريط المهام بقت بنفس أيقونة D بتاعة البرنامج.</span></li>
+<li><span class="en">Clearer message when the update key file is missing, with the folder where to put it.</span><span class="ar">رسالة أوضح لما ملف مفتاح التحديث مش موجود، مع مكان وضعه.</span></li>
+</ul></div>
+<div class="rel"><h3>v7.813.1</h3><div class="d"><span class="en">26 Nov 2026</span><span class="ar">٢٦ نوفمبر ٢٠٢٦</span></div><ul>
+<li><span class="en">New version numbering, shown in the program footer and the file names.</span><span class="ar">ترقيم إصدارات جديد، ظاهر في أسفل البرنامج وفي أسماء الملفات.</span></li>
+<li><span class="en">Two ways to install: a classic Next, Next installer (no administrator rights) or a portable version with no installation.</span><span class="ar">طريقتين للتشغيل: مثبّت عادي Next, Next من غير صلاحيات أدمن، أو نسخة بدون تثبيت.</span></li>
+<li><span class="en">The free trial opens straight into the program, with no login. It is limited to 50 operations (each add or delete counts, editing is free) and runs only on your PC.</span><span class="ar">النسخة التجريبية المجانية بتفتح على طول من غير تسجيل دخول، محدودة بـ 50 عملية (الإضافة والحذف يتحسبوا والتعديل مجاني) وبتشتغل على جهازك بس.</span></li>
+<li><span class="en">New program icon.</span><span class="ar">أيقونة جديدة للبرنامج.</span></li>
+</ul></div>
+</div>
+
+<h2><span class="en">What it does</span><span class="ar">البرنامج بيعمل إيه</span></h2>
+<div class="grid">
+<div class="card"><h3><span class="en">Import from Excel</span><span class="ar">استيراد من Excel</span></h3><p><span class="en">Add new invoices from your ERP export in one step. Duplicates are skipped.</span><span class="ar">ضيف فواتير جديدة من ملف Excel مرة واحدة. المكرر بيتخطى.</span></p></div>
+<div class="card"><h3><span class="en">Delivery follow-up</span><span class="ar">متابعة التسليم</span></h3><p><span class="en">Undelivered invoices by district, overdue and delivery dates.</span><span class="ar">الفواتير اللي لسه متسلمتش حسب المنطقة والتأخير ومواعيد التسليم.</span></p></div>
+<div class="card"><h3><span class="en">Printable reports</span><span class="ar">تقارير للطباعة</span></h3><p><span class="en">Proposal and In Process reports grouped by district, ready to print or save as PDF.</span><span class="ar">تقارير Proposal و In Process مجمعة بالمنطقة، جاهزة للطباعة أو PDF.</span></p></div>
+<div class="card"><h3><span class="en">Live sync</span><span class="ar">مزامنة مباشرة</span></h3><p><span class="en">Several devices work on the same data and stay in step (full version).</span><span class="ar">أكتر من جهاز على نفس البيانات (النسخة الكاملة).</span></p></div>
+<div class="card"><h3><span class="en">Driver tracking</span><span class="ar">تتبع السواقين</span></h3><p><span class="en">Track what each driver delivered and when (full version).</span><span class="ar">تابع كل سواق سلم إيه وإمتى (النسخة الكاملة).</span></p></div>
+<div class="card"><h3><span class="en">Cash and expenses</span><span class="ar">الكاش والمصروفات</span></h3><p><span class="en">Collect cash invoices, record expenses and returned cash.</span><span class="ar">تحصيل فواتير الكاش وتسجيل المصروفات والمرتجع.</span></p></div>
+<div class="card"><h3><span class="en">Paper print check</span><span class="ar">مراجعة الورق</span></h3><p><span class="en">Warehouse sales order and invoice paper checks with history.</span><span class="ar">مراجعة ورق أوامر البيع والفواتير بالمستودع مع السجل.</span></p></div>
+<div class="card"><h3><span class="en">English and Arabic</span><span class="ar">عربي وإنجليزي</span></h3><p><span class="en">Switch language and font size any time from Settings.</span><span class="ar">غيّر اللغة وحجم الخط في أي وقت من الإعدادات.</span></p></div>
+<div class="card"><h3><span class="en">One-button updates</span><span class="ar">تحديث بزرار واحد</span></h3><p><span class="en">Check for updates and install them with a safe backup and one-click restore (full version).</span><span class="ar">فحص التحديثات وتثبيتها مع نسخة احتياطية وزر رجوع (النسخة الكاملة).</span></p></div>
+</div>
+
+<h2><span class="en">Real screens from the program</span><span class="ar">شاشات حقيقية من البرنامج</span></h2>
+<div class="pics">
+<figure><img src="img/list.jpg" alt="Invoice list"><figcaption><span class="en">Invoice list with search and bulk actions</span><span class="ar">قائمة الفواتير مع البحث والتعديل الجماعي</span></figcaption></figure>
+<figure><img src="img/new.jpg" alt="New invoice"><figcaption><span class="en">New invoice form and Excel import</span><span class="ar">فاتورة جديدة واستيراد من Excel</span></figcaption></figure>
+</div>
+
+<h2><span class="en">Start in three steps</span><span class="ar">ابدأ في ٣ خطوات</span></h2>
+<div class="steps">
+<div><b><span class="en">Download</span><span class="ar">حمّل</span></b><br><span class="en">Pick the installer or the portable button above.</span><span class="ar">اختار نسخة التثبيت أو بدون تثبيت من الزرار فوق.</span></div>
+<div><b><span class="en">Extract</span><span class="ar">فك الضغط</span></b><br><span class="en">Installer: Next, Next. Portable: right-click the zip, Extract All.</span><span class="ar">التثبيت: Next, Next. بدون تثبيت: كليك يمين على الملف ثم Extract All.</span></div>
+<div><b><span class="en">Run</span><span class="ar">شغّل</span></b><br><span class="en">Open Distribution Program Trial. It opens straight in.</span><span class="ar">افتح Distribution Program Trial. بيفتح على طول.</span></div>
+</div>
+
+<div class="band">
+<h2 style="margin-top:0">Distribution Program v8.153.35</h2>
+<a class="btn" href="download/Distribution-Program-Trial-v8.153.35-Setup.exe" download><span class="en">Download installer version</span><span class="ar">حمل نسخة التثبيت</span></a> <a class="btn" href="download/Distribution-Program-Trial-v8.153.35-Portable.zip" download><span class="en">Download portable version</span><span class="ar">حمل نسخة بدون تثبيت</span></a>
+<div class="note" id="android"><b><span class="en">Phone app for drivers (Android)</span><span class="ar">تطبيق السواقين (أندرويد)</span></b><br><a class="btn" href="download/Distribution-Android-v1.4.3.apk" download><span class="en">Download Android app (APK)</span><span class="ar">حمل تطبيق أندرويد (APK)</span></a><br><span class="en">Version 1.4.3 &middot; 3.2 MB &middot; open this page on the phone, tap the button, then open the file and allow "Install unknown apps" for your browser when Android asks. No Google sign-in needed. The app starts empty: scan the QR from the program (Settings > Phone app company code) or paste the company code to connect it to your own company.</span><span class="ar">النسخة 1.4.3 &middot; حجمه 3.2 ميجابايت &middot; افتح الصفحة دي من الموبايل، دوس الزرار، وافتح الملف، ولما أندرويد يسأل اسمح بـ "تثبيت تطبيقات غير معروفة" للمتصفح. مش محتاج حساب جوجل. التطبيق بيفتح فاضي: امسح الـ QR من البرنامج (Settings > Phone app company code) أو الصق كود الشركة عشان يتوصل بشركتك.</span><br><small>SHA-256: 0f103f61120aa7a8bac92102a59a3183feedfb47b43b6d8099ecfd90d58a0749</small></div>
+<div class="note"><span class="en">The trial keeps your data on your own PC and is limited to 50 operations in total (each add or delete of an invoice counts as one; editing is free). It is not connected to any company data. For the full version, contact the developer.</span><span class="ar">النسخة التجريبية بتحفظ بياناتك على جهازك ومحدودة بـ 50 عملية إجمالا (إضافة أو حذف فاتورة = عملية، والتعديل مجاني)، وغير متصلة ببيانات أي شركة. للنسخة الكاملة تواصل مع المطوّر.</span></div>
+<div class="note"><span class="en">Windows may show a security notice for a new program. Choose "More info" then "Run anyway" if you trust the source.</span><span class="ar">ممكن ويندوز يطلع تنبيه أمان لبرنامج جديد. اختار More info ثم Run anyway لو واثق في المصدر.</span></div>
+</div>
+</div>
+<footer>&copy; 2026 Eng. Kirollos William<div class="contact"><span class="en">Contact: </span><span class="ar">للتواصل: </span><a href="tel:+201281154420" dir="ltr">01281154420</a> &middot; <a href="https://wa.me/201281154420" target="_blank" rel="noopener">WhatsApp</a></div></footer>
+<script>
+var b=document.getElementById('lang');function set(l){document.documentElement.lang=l;document.documentElement.dir=l=='ar'?'rtl':'ltr';b.textContent=l=='ar'?'English':'العربية';try{localStorage.l=l}catch(e){}}
+b.onclick=function(){set(document.documentElement.lang=='ar'?'en':'ar')};
+try{if(localStorage.l)set(localStorage.l);else if((navigator.language||'').indexOf('ar')==0)set('ar')}catch(e){}
+</script></body></html>
