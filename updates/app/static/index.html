@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distribution Program</title>
+<link rel="icon" type="image/png" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/app.css?v=55">
+</head>
+<body class="light">
+<!-- ===================== LOGIN ===================== -->
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <div class="login-logo">Distribution<span>Program</span></div>
+    <label class="login-lab">User</label>
+    <div id="lg-user"></div>
+    <label class="login-lab">Password</label>
+    <input id="lg-pass" type="password" autocomplete="current-password">
+    <button id="lg-go" class="btn big accent">Login</button>
+    <div id="lg-err" class="login-err"></div>
+    <div class="login-foot"><span id="lg-ver"></span><span id="lg-credit"></span><span id="lg-sign"></span></div>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <button class="tb ghost" id="t-back" title="Previous page">&#8592; Back</button>
+    <button class="tb icon" id="t-menu" title="Hide / show the side menu">&#9776;</button>
+    <button class="tb ghost" id="t-home">Home</button>
+    <div class="brand">Distribution<span>Program</span></div>
+    <span class="status" id="status"></span>
+    <span class="spacer"></span>
+    <div id="receive-bar" class="live-bar"><span class="live-label">Live sync</span><span id="receive-summary">Waiting for reception</span><span class="bar-tail">Latest batch</span></div>
+    <span class="userchip" id="userlbl"></span>
+    <button class="tb ghost hidden" id="t-switch" title="Sign in as another user (for example Admi1)">Switch user</button>
+    <button class="tb ghost" id="t-refresh" title="Sync now (F5)">&#10227; Sync</button>
+    <button class="tb ghost" id="t-theme">Light / Dark</button>
+    <button class="tb ghost" id="t-shortcut" title="Create a desktop launcher shortcut">Desktop icon</button>
+    <button class="tb ghost" id="t-quit">Quit</button>
+    <button class="tb" id="t-settings">&#9881; Settings</button>
+  </header>
+
+  <div class="live-bars"><div id="usage-bar" class="live-bar usage-bar"><span class="live-label">Firebase usage</span><span class="estimate-tag">Whole project · Google Cloud Monitoring</span><span id="usage-summary">Waiting for real project totals</span></div></div>
+  <div class="project-usage-wrap"><div class="live-bar" id="project-usage-bar"><span class="live-label">Project usage</span><span id="project-usage-summary">Checking Monitoring access...</span><button class="history-toggle" id="usage-settings">Usage</button></div></div>
+  <div class="mid">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="body">
+      <section id="v-home" class="view hidden"><h1>Home</h1><div class="home-grid" id="home-grid"></div></section>
+
+      <section id="v-details" class="view hidden">
+        <div class="filters" id="det-filters"></div>
+        <div class="toolbar">
+          <button class="btn" id="det-editall">Edit invoice (all fields)</button>
+          <button class="btn" id="det-bulk">Edit selected (bulk)</button>
+          <button class="btn danger" id="det-del">Delete selected</button>
+          <button class="btn" id="det-print">Print results</button>
+          <button class="btn" id="det-savepdf">Save PDF</button>
+          <span class="cnt" id="det-cnt"></span>
+        </div>
+        <div class="hint">Ctrl+A = select all | Ctrl/Shift+click = select many | Tab / arrows = move | Enter = edit</div>
+        <div class="gridwrap" id="det-grid"></div>
+      </section>
+
+      <section id="v-new" class="view hidden">
+        <div class="toolbar">
+          <button class="btn accent" id="new-import">Import new invoices from Excel</button>
+          <span class="hint">&nbsp;&nbsp;(first 7 columns; skips invoices already added; then asks District / Forward To /
+            Invoice Type / Payment Terms / Brand for each)</span>
+        </div>
+        <div class="form-scroll"><div class="form3" id="new-form"></div>
+          <div class="toolbar pad">
+            <button class="btn big accent" id="new-save">Save invoice</button>
+            <button class="btn big" id="new-clear">Clear</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="v-report" class="view hidden">
+        <h1 id="rep-title"></h1>
+        <div class="rep-bar" id="rep-bar"></div>
+        <div class="cnt big-cnt" id="rep-cnt"></div>
+        <div class="hint">Matches the Distributed Date + Driver + Car + Line (empty = not filtered).
+          Proposal prints 1 copy, In Process prints 2; the PDF is also saved on the Desktop.</div>
+        <div class="gridwrap" id="rep-grid"></div>
+      </section>
+
+      <section id="v-ho" class="view hidden">
+        <h1>Invoice to Head Office</h1>
+        <div class="ho-form" id="ho-form"></div>
+        <button class="btn big accent" id="ho-go">Create PDF</button>
+        <div class="hint">Dates (dd/mm/yyyy or dd-mm-yyyy) match the Distributed Date. Empty = no filter.
+          The PDF is saved on the Desktop and opened.</div>
+      </section>
+
+      <section id="v-wh" class="view hidden">
+        <h1>Warehouse Report</h1>
+        <div class="tabs">
+          <button class="tab on" data-tab="wh-a">Sales Orders (delivery notes)</button>
+          <button class="tab" data-tab="wh-b">Invoices printed</button>
+        </div>
+        <div id="wh-a">
+          <div class="toolbar">
+            <button class="btn" id="wh-import">Import Excel (adds new rows only)</button>
+            <button class="btn accent" id="wh-print">Print new only</button>
+            <button class="btn" id="wh-paper-check">Check</button>
+            <button class="btn" id="wh-history">History search</button>
+            <button class="btn" id="wh-reprint">Reprint all</button>
+            <button class="btn" id="wh-savepdf">Save PDF (no printing)</button>
+            <span class="cnt" id="wh-cnt"></span>
+          </div>
+          <div class="hint" id="wh-display-note"></div>
+          <div class="gridwrap" id="wh-grid"></div>
+        </div>
+        <div id="wh-b" class="hidden">
+          <div class="toolbar">
+            <button class="btn" id="pi-import">Import invoices Excel (data only)</button>
+            <button class="btn accent" id="pi-pdf">Save PDF</button>
+            <button class="btn" id="pi-paper-check">Check</button>
+            <button class="btn" id="pi-history">History search</button>
+          </div>
+          <div class="toolbar">
+            <label>Printed on (dd/mm/yyyy):</label><input id="pi-date" class="in" size="12">
+            <label>Invoice:</label><input id="pi-q" class="in" size="20">
+            <span class="cnt" id="pi-cnt"></span>
+          </div>
+          <div class="hint">Latest 50 matching rows by added order, newest first. Older rows stay stored. Save PDF includes all matching rows.</div>
+          <div class="gridwrap" id="pi-grid"></div>
+        </div>
+      </section>
+
+      <section id="v-rgr" class="view hidden">
+        <h1>RGR Not Costed</h1>
+        <div class="hint">Shows Invoice Type RGR while either cost date is blank. Pending RGR stays visible at any age, even with Last 5 days checked.</div>
+        <div class="filters" id="rgr-filters"></div>
+        <div class="toolbar">
+          <button class="btn danger" id="rgr-del">Delete selected</button>
+          <button class="btn" id="rgr-print">Print results</button>
+          <span class="cnt" id="rgr-cnt"></span>
+        </div>
+        <div class="gridwrap" id="rgr-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span id="foot-left"></span><span id="foot-right"></span>
+  </footer>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast hidden"></div>
+<input type="file" id="filepick" accept=".xlsx,.xlsm,.json" class="hidden">
+<script src="/static/prefs.js?v=55"></script>
+<script src="/static/c1.js?v=55"></script>
+<script src="/static/c2.js?v=55"></script>
+<script src="/static/v1.js?v=55"></script>
+<script src="/static/v2.js?v=55"></script>
+<script src="/static/drafts.js?v=55"></script>
+<script src="/static/reviewplans.js?v=55"></script>
+<script src="/static/drvdel.js?v=1003"></script>
+<script src="/static/license.js?v=1003"></script>
+<script src="/static/expenses.js?v=55"></script>
+<script src="/static/delivery.js?v=55"></script>
+<script src="/static/v54.js?v=55"></script>
+<script src="/static/layout.js?v=983"></script>
+<script src="/static/qrcode.js?v=1"></script>
+<script src="/static/firebase_tools.js?v=1004"></script>
+<script src="/static/boot.js?v=983"></script>
+<script src="/static/updnotice.js?v=893"></script><script src="/static/whatsnew.js?v=1003"></script>
+<script src="/static/trial_autologin.js"></script></body>
+</html>
