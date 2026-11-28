@@ -175,7 +175,7 @@ ACCENT, ACCENT_2, ACCENT_3 = "#0f4c81", "#2b6cb0", "#1e4e8c"
 SIDE_PAL = {"light": dict(home="#e2e8f0", search="#dbeafe", new="#dcfce7", und="#ffedd5", details="#ede9fe", rep="#fce7f3", wh="#cffafe", rgr="#fef9c3"),
             "dark": dict(home="#334155", search="#1e3a8a", new="#14532d", und="#7c2d12", details="#4c1d95", rep="#831843", wh="#164e63", rgr="#713f12")}
 SIDE_FG = {"light": "#1e293b", "dark": "#f1f5f9"}
-APP_VERSION = "v8.173.37"
+APP_VERSION = "v8.183.38"
 VERSION = APP_VERSION + (" Replica" if REPLICA else " Main")
 CREDIT = "\u00a9 2026 Distribution Program. All rights reserved.   |   Made by Eng. Kirollos William"
 MAX_ROWS = 1200   # a screen never loads more than this (keeps every tab fast); the newest rows are shown

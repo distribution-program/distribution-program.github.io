@@ -99,6 +99,8 @@ def claim_instance(data_dir, trial, version):
     return True
 
 WINDOW_PROC=None
+WATCH_PROC=None  # native window helper only: when it ends the whole program must end (a browser app window can hand off and exit early)
+WATCH_PROFILE=None
 def remember_window(proc):
     """Keep the window process (exact PID) so Update can close it and a second launch can find it."""
     global WINDOW_PROC
@@ -234,6 +236,8 @@ def native_window(url, data_dir, is_windows=None):
                     break
             if not quick:
                 dplog('native window running')
+                global WATCH_PROC,WATCH_PROFILE
+                WATCH_PROC=proc;WATCH_PROFILE=prof
                 return True
             try:
                 with open(os.path.join(data_dir, 'window.log'), 'a', encoding='utf-8') as lg:

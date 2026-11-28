@@ -2502,6 +2502,7 @@ def main():
     desktop_app.publish_instance(url, core.TEST_MODE, VERSION)
     desktop_app.dplog('server listening %s'%url); _boot('server listening '+url)
     threading.Timer(0.6, lambda: desktop_app.open_window(url, core.DATA_DIR, core.TEST_MODE)).start()
+    threading.Thread(target=window_close_watch,args=(srv,),daemon=True).start()
     try:
         srv.serve_forever()
     finally:
@@ -2509,10 +2510,43 @@ def main():
         srv.server_close()
         if FINANCE_SERVICE:FINANCE_SERVICE.close()
         desktop_app._cleanup()
+        if WINDOW_EXIT and not RESTARTING:
+            try:
+                if desktop_app.WATCH_PROFILE: desktop_app._free_profile(desktop_app.WATCH_PROFILE)
+            except Exception: pass
+            os._exit(0)
         if RESTARTING:os._exit(0)
 
 
 RESTARTING=False
+WINDOW_EXIT=False
+SYNC_BEFORE_EXIT_SECONDS=45
+
+def window_close_watch(srv):
+    """Native window closed with its X button: sync like Quit (up to SYNC_BEFORE_EXIT_SECONDS), then end the whole program like End Task."""
+    import desktop_app
+    global WINDOW_EXIT,EXIT_FLOW
+    while desktop_app.WATCH_PROC is None: time.sleep(0.5)
+    p=desktop_app.WATCH_PROC
+    try: p.wait()
+    except Exception: return
+    if RESTARTING: return
+    desktop_app.dplog('window closed by user: sync then exit (limit %ss)'%SYNC_BEFORE_EXIT_SECONDS)
+    WINDOW_EXIT=True
+    # Whatever happens, the process must be gone shortly after the limit.
+    t=threading.Timer(SYNC_BEFORE_EXIT_SECONDS+15,lambda:(desktop_app.dplog('hard exit after timeout'),os._exit(0)));t.daemon=True;t.start()
+    try:
+        if EXIT_FLOW is None:
+            import exitflow,sys
+            EXIT_FLOW=exitflow.ExitFlow(sys.modules[__name__])
+        st=EXIT_FLOW.start()
+        end=time.monotonic()+SYNC_BEFORE_EXIT_SECONDS
+        while st.get('state')=='running' and time.monotonic()<end:
+            time.sleep(0.3);st=EXIT_FLOW.get()
+        desktop_app.dplog('sync before exit finished: %s'%st.get('state'))
+    except Exception as e:
+        desktop_app.dplog('sync before exit error %r'%(e,))
+    srv.shutdown()
 if __name__ == "__main__":
     try:
         main()

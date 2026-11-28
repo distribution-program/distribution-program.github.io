@@ -87,7 +87,7 @@ async function notifyRefresh(){
  if(r.unseen){const x=el('span','nbadge','+'+r.unseen);x.style.cssText='background:#2563eb;color:#fff;border-radius:10px;padding:1px 7px;margin-left:6px;font-size:12px;font-weight:700';b.append(x)}
  if(NOTIFY_REFRESH)NOTIFY_REFRESH();
 }
-const NMARK=new Set();let NLX=-1,NLY=-1;
+const NMARK=new Set();let NLX=-1,NLY=-1,NLT=0,NARM=true;const NQUIET=160;
 function notifyMark(ids){ids=ids.filter(i=>!NMARK.has(i));if(!ids.length)return;ids.forEach(i=>NMARK.add(i));api('/api/notify/seen',{ids}).then(()=>{ids.forEach(i=>NMARK.delete(i));notifyRefresh()},()=>ids.forEach(i=>NMARK.delete(i)))}
 function notifyView(e){
  api('/api/notify/seen',{ids:[e.id]}).then(r=>{if(r.ok)notifyRefresh()});
@@ -106,13 +106,13 @@ async function notifyCenter(){
  const draw=()=>{
   const hh=el('div');hh.style.cssText='display:flex;align-items:center;gap:14px;flex-wrap:wrap';hh.append(el('h2',null,'Notifications'));
   const mk=el('button','btn accent','Mark all as read');mk.onclick=()=>notifyMark(NOTIFY_ROWS.filter(x=>!x.seen).map(x=>x.id));hh.append(mk);
-  hh.append(el('span','hint','Point at a notification to mark it read and move it to Earlier, or press Mark all as read.'));w.body.replaceChildren(hh);
+  hh.append(el('span','hint','Point at a notification to mark it read (one per mouse movement), or press Mark all as read.'));w.body.replaceChildren(hh);
   const fresh=NOTIFY_ROWS.filter(x=>!x.seen),old=NOTIFY_ROWS.filter(x=>x.seen);
   const section=(title,rows,isNew)=>{
    const h=el('h3',null,title);h.style.marginTop='18px';w.body.append(h);
    if(!rows.length){w.body.append(el('p','hint',isNew?'Nothing new.':'Nothing earlier.'));return}
    const t=el('table','gtab');t.style.width='100%';const hd=el('tr');for(const x of ['','Type','Invoice','Customer','By','Time',''])hd.append(el('th',null,x));t.append(hd);
-   for(const e of rows){const tr=el('tr');if(isNew){const mark=ev=>{if(ev.type==='mousemove'){if(ev.clientX===NLX&&ev.clientY===NLY)return;NLX=ev.clientX;NLY=ev.clientY}notifyMark([e.id])};tr.addEventListener('mousemove',mark);tr.addEventListener('click',mark)}const dot=el('td');dot.style.width='24px';if(isNew){const d=el('span');d.style.cssText='display:inline-block;width:12px;height:12px;border-radius:50%;background:#2563eb';d.title='New';dot.append(d)}
+   for(const e of rows){const tr=el('tr');if(isNew){const mark=ev=>{if(ev.type==='mousemove'){const n=performance.now(),quiet=n-NLT>=NQUIET;NLT=n;if(!NARM&&!quiet)return;if(ev.clientX===NLX&&ev.clientY===NLY)return;NLX=ev.clientX;NLY=ev.clientY}NARM=false;notifyMark([e.id])};tr.addEventListener('mousemove',mark);tr.addEventListener('click',mark)}const dot=el('td');dot.style.width='24px';if(isNew){const d=el('span');d.style.cssText='display:inline-block;width:12px;height:12px;border-radius:50%;background:#2563eb';d.title='New';dot.append(d)}
     const op=el('td',null,e.operation);op.style.fontWeight='700';
     const who=e.operation==='Delete'?'Deleted by '+(e.by||'not recorded'):(e.operation==='Add'?'Entered by ':'Updated by ')+(e.by||'not recorded');
     const act=el('td');if(e.operation!=='Delete')act.append(expButton('View',()=>notifyView(e)));

@@ -1,7 +1,7 @@
 {
  "format": 1,
- "version": "v8.173.37",
- "notes": "Trial counting: add, edit, delete and each PDF print click count toward the 50 operations.",
+ "version": "v8.183.38",
+ "notes": "Notifications: hovering marks one row per mouse movement. Closing the window syncs then ends the program fully.",
  "files": {
   "app/access_control.py": {
    "sha256": "a2d21ffde045f2ea539d8d36887612adbc6afa912f3e8a938da1e4d73754517d",
@@ -20,7 +20,7 @@
    "size": 2503
   },
   "app/core.py": {
-   "sha256": "6c3c4f288dc80cde5e2fc71db4448605721f73c8a47148876670a5ad668509c9",
+   "sha256": "ffaa9dbddd2872567626f2df1cd35e8de13f5c6576df5921de0e5235990ea105",
    "size": 54767
   },
   "app/customer.py": {
@@ -28,8 +28,8 @@
    "size": 7310
   },
   "app/desktop_app.py": {
-   "sha256": "dad5c74bafbd08b7703ba5978ff80c40a63844b208c140e2d06e7ff65732c52f",
-   "size": 17656
+   "sha256": "988598ed33143b5f2632173313b46a55cdd0f1625dc909a78ad036ba71aecdf0",
+   "size": 17911
   },
   "app/drvdel.py": {
    "sha256": "66451c53e97a2b086770a9cd12411c942ec5a1e148d8a7325ab3554f5da2bc21",
@@ -104,8 +104,8 @@
    "size": 4136
   },
   "app/server.py": {
-   "sha256": "006e32b11d6179b0eee2b2a85217c02d1799ee802a14dba277aa603ca1f7cf54",
-   "size": 141639
+   "sha256": "6f4783c462ce60f9661a55e3464c2f54956a1662f08f0de05f0d18a4d1520581",
+   "size": 143218
   },
   "app/static/app.css": {
    "sha256": "af4b42c6ede64ed9ad4f518995dc89fdef836adb91cd94eea31b93b74b4148cd",
@@ -188,8 +188,8 @@
    "size": 33705
   },
   "app/static/v54.js": {
-   "sha256": "1ee8b03ef7b9735ab7415594c51c21640a738992a7208e30db03cada6401e602",
-   "size": 23796
+   "sha256": "23d681d30b467cb6324f120d5bc2b22977471cd048e9491596f9df44194e0484",
+   "size": 23918
   },
   "app/static/whatsnew.js": {
    "sha256": "ce7431336592f7fd30201be453089c1d6d0aa0b7d9f58c401ee3cf70f1f468ac",
