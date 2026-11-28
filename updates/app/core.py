@@ -175,7 +175,7 @@ ACCENT, ACCENT_2, ACCENT_3 = "#0f4c81", "#2b6cb0", "#1e4e8c"
 SIDE_PAL = {"light": dict(home="#e2e8f0", search="#dbeafe", new="#dcfce7", und="#ffedd5", details="#ede9fe", rep="#fce7f3", wh="#cffafe", rgr="#fef9c3"),
             "dark": dict(home="#334155", search="#1e3a8a", new="#14532d", und="#7c2d12", details="#4c1d95", rep="#831843", wh="#164e63", rgr="#713f12")}
 SIDE_FG = {"light": "#1e293b", "dark": "#f1f5f9"}
-APP_VERSION = "v8.163.36"
+APP_VERSION = "v8.173.37"
 VERSION = APP_VERSION + (" Replica" if REPLICA else " Main")
 CREDIT = "\u00a9 2026 Distribution Program. All rights reserved.   |   Made by Eng. Kirollos William"
 MAX_ROWS = 1200   # a screen never loads more than this (keeps every tab fast); the newest rows are shown
@@ -259,18 +259,35 @@ def db_put(items, dirty=1, lan=1):
             import license_mgr
             _lic = license_mgr.status(sys.modules[__name__])
             if _lic["readonly"]:
-                raise ValueError("Trial finished: the program is read and print only. Press Enter license and paste your license key to continue.")
+                raise ValueError("Trial finished: the 50 operations are used. View and search still work. Press Enter license and paste your license key to continue.")
             row = cx.execute("SELECT v FROM meta WHERE k='trial_ops'").fetchone()
             used = int(row[0]) if row else 0
             fresh = len({u for u, _ in items if not cx.execute("SELECT 1 FROM inv WHERE uid=?", (u,)).fetchone()})  # only NEW invoices count; edits are free
             if fresh and not _lic["licensed"] and used + fresh > TRIAL_LIMIT:
-                raise ValueError("Trial version limit reached: %d operations (add or delete). Press Enter license and paste your license key to continue." % TRIAL_LIMIT)
+                raise ValueError("Trial version limit reached: %d operations (add, edit, delete or print). Press Enter license and paste your license key to continue." % TRIAL_LIMIT)
         cx.executemany("INSERT OR REPLACE INTO inv(uid,data,updated,dirty,lan) VALUES(?,?,?,?,?)",
                        [(u, json.dumps(d, ensure_ascii=False), d.get("updated", 0), dirty, lan) for u, d in items])
         if TRIAL_LIMIT and fresh and not _lic["licensed"]:
             cx.execute("INSERT OR REPLACE INTO meta VALUES('trial_ops',?)", (str(used + fresh),))
             license_mgr.status(sys.modules[__name__], True)
         cx.commit()
+
+
+def trial_bump(n=1, pre_only=False):
+    """Trial edition: one more operation (edit or print click). Free once a valid license is active. Raises when the limit is reached."""
+    if not TRIAL_LIMIT: return
+    import license_mgr
+    with LOCK:
+        st = license_mgr.status(sys.modules[__name__])
+        if st["licensed"]: return
+        row = cx.execute("SELECT v FROM meta WHERE k='trial_ops'").fetchone()
+        used = int(row[0]) if row else 0
+        if used + (0 if pre_only else n) > TRIAL_LIMIT or (pre_only and used >= TRIAL_LIMIT):
+            raise ValueError("Trial version limit reached: %d operations (add, edit, delete or print). Press Enter license and paste your license key to continue." % TRIAL_LIMIT)
+        if pre_only or st["readonly"]: return   # expired license: print stays allowed and is not counted
+        cx.execute("INSERT OR REPLACE INTO meta VALUES('trial_ops',?)", (str(used + n),))
+        cx.commit()
+        license_mgr.status(sys.modules[__name__], True)
 
 
 # v54 ordering metadata is local and never changes existing invoice/user payloads.
@@ -285,7 +302,7 @@ def arrival_key(uid):
     row=q("SELECT arrival FROM invoice_order WHERE uid=?",(uid,))
     return row[0][0] if row else 0
 
-INTEGRITY = {'ed25519.py': '05fc4835b5debb89f5fa15f757c03111d9fb1bd8e91b79b62e1f3751f6ba071d', 'license_mgr.py': 'e00347887fbfa30df3d3092998eaf00a89a0ad2e9f74bf64fc15c26d1102e727'}  # stamped at build time: SHA-256 of the license files. An edited license file makes the trial read-only.
+INTEGRITY = {'ed25519.py': '05fc4835b5debb89f5fa15f757c03111d9fb1bd8e91b79b62e1f3751f6ba071d', 'license_mgr.py': 'd7d1014d9cc0ad757866fa3907d626a557ef6f9159e5b6ccdd68a25ac1f54459'}  # stamped at build time: SHA-256 of the license files. An edited license file makes the trial read-only.
 TAMPERED = False
 if TRIAL_LIMIT and INTEGRITY:
     try:

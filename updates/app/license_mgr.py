@@ -175,7 +175,7 @@ def apply_triggers(core):
         else:
             core.cx.executescript("""DROP TRIGGER IF EXISTS trial_del_guard; DROP TRIGGER IF EXISTS trial_del_count;
             CREATE TRIGGER trial_del_guard BEFORE DELETE ON inv WHEN %s
-            BEGIN SELECT RAISE(ABORT,'Trial version limit reached: %d operations (add or delete). Enter a license key to continue.'); END;
+            BEGIN SELECT RAISE(ABORT,'Trial version limit reached: %d operations (add, edit, delete or print). Enter a license key to continue.'); END;
             CREATE TRIGGER trial_del_count AFTER DELETE ON inv
             BEGIN UPDATE meta SET v=CAST(CAST(v AS INTEGER)+1 AS TEXT) WHERE k='trial_ops'; END;""" % (("1" if st["readonly"] else "CAST((SELECT v FROM meta WHERE k='trial_ops') AS INTEGER) >= %d" % core.TRIAL_LIMIT), core.TRIAL_LIMIT))
         core.cx.commit()

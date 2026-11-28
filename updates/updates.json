@@ -1,7 +1,7 @@
 {
  "format": 1,
- "version": "v8.163.36",
- "notes": "Licensed customers can update inside the program. License status and days left are in Settings.",
+ "version": "v8.173.37",
+ "notes": "Trial counting: add, edit, delete and each PDF print click count toward the 50 operations.",
  "files": {
   "app/access_control.py": {
    "sha256": "a2d21ffde045f2ea539d8d36887612adbc6afa912f3e8a938da1e4d73754517d",
@@ -20,8 +20,8 @@
    "size": 2503
   },
   "app/core.py": {
-   "sha256": "6e9a2c1a0fa3a7da2e05bc079d16e69f082df8a0d499f0726671c6ada0ec54dc",
-   "size": 53735
+   "sha256": "6c3c4f288dc80cde5e2fc71db4448605721f73c8a47148876670a5ad668509c9",
+   "size": 54767
   },
   "app/customer.py": {
    "sha256": "8f7f8305a81c396773d21d2aba250773171723be3802e0f394b55ef4eddb3e5b",
@@ -72,8 +72,8 @@
    "size": 3859
   },
   "app/license_mgr.py": {
-   "sha256": "e00347887fbfa30df3d3092998eaf00a89a0ad2e9f74bf64fc15c26d1102e727",
-   "size": 9863
+   "sha256": "d7d1014d9cc0ad757866fa3907d626a557ef6f9159e5b6ccdd68a25ac1f54459",
+   "size": 9876
   },
   "app/localfinance.py": {
    "sha256": "8f9c69a7b21e08c610550aa2887c1f87081a25c5b2692430808d78f954926932",
@@ -104,16 +104,16 @@
    "size": 4136
   },
   "app/server.py": {
-   "sha256": "6ee36d6e1fef55032dbfa68b5fb4f5f38b727003659c321d1a6405397702f1b1",
-   "size": 140487
+   "sha256": "006e32b11d6179b0eee2b2a85217c02d1799ee802a14dba277aa603ca1f7cf54",
+   "size": 141639
   },
   "app/static/app.css": {
    "sha256": "af4b42c6ede64ed9ad4f518995dc89fdef836adb91cd94eea31b93b74b4148cd",
    "size": 24538
   },
   "app/static/boot.js": {
-   "sha256": "383b325a16b2a54578ad112f821ba2faa3d1f5b7cec4c357496767a315d8c92a",
-   "size": 54576
+   "sha256": "53a8cfb71d41a4c9e078bd0aec8084c32ee2e3a537fa4cc4a4a2e6da6e4aec19",
+   "size": 54599
   },
   "app/static/c1.js": {
    "sha256": "26a745cb8ba39b70d239db981029f9afbb15bf5007f28bd7487c4868f374451a",
@@ -156,8 +156,8 @@
    "size": 22472
   },
   "app/static/license.js": {
-   "sha256": "aacd3ef6738018b94af5a6a1ca7ca64292f210c1a36b149cf441a4f4a4b14c3a",
-   "size": 9819
+   "sha256": "d968e5fd1cdfd0ed0914652518be69e1278840b0be547d8dff7dd5ed01cbfa8b",
+   "size": 9864
   },
   "app/static/prefs.js": {
    "sha256": "1c18525e0495904fe7caa6dbb85601bf3b3e1ccc3317688090254c5afe370c28",

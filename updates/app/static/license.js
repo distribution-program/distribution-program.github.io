@@ -10,7 +10,7 @@
     if (!b) { b = E("div"); b.id = "lic-bar"; const lb = document.querySelector(".live-bars"); lb.parentNode.insertBefore(b, lb); }
     let en, ar, col;
     if (L.licensed) { en = "Licensed to " + L.name + (L.expiry ? ", valid until " + L.expiry : ", no expiry") + (L.edition === "full" ? " (Full)" : " (Trial limit lifted)"); ar = "مرخص لـ " + L.name + (L.expiry ? " حتى " + L.expiry : " بدون انتهاء"); col = "background:#dcfce7;border-bottom:2px solid #16a34a;color:#14532d"; }
-    else if (L.readonly) { en = L.lic_state === "expired" ? "License expired: read and print only" : L.lic_state === "clock" ? "PC date was moved back: read and print only" : "Trial finished: read and print only"; ar = L.lic_state === "expired" ? "انتهى الترخيص: قراءة وطباعة فقط" : "انتهت النسخة التجريبية: قراءة وطباعة فقط"; col = "background:#fee2e2;border-bottom:2px solid #dc2626;color:#7f1d1d"; }
+    else if (L.readonly) { en = L.lic_state === "expired" ? "License expired: read and print only" : L.lic_state === "clock" ? "PC date was moved back: read and print only" : "Trial finished: 50 operations used (view and search only)"; ar = L.lic_state === "expired" ? "انتهى الترخيص: قراءة وطباعة فقط" : "انتهت النسخة التجريبية: استخدمت 50 عملية (عرض وبحث بس)"; col = "background:#fee2e2;border-bottom:2px solid #dc2626;color:#7f1d1d"; }
     else { en = "Trial: " + L.left + " of " + L.limit + " operations left"; ar = "النسخة التجريبية: باقي " + L.left + " من " + L.limit + " عملية"; col = "background:#fef3c7;border-bottom:2px solid #f59e0b;color:#78350f"; }
     b.style.cssText = col + ";padding:6px 14px;font:600 14px Segoe UI,Arial;display:flex;gap:14px;align-items:center;flex-wrap:wrap";
     b.innerHTML = "";
@@ -36,7 +36,7 @@
     else if (L.readonly) { h.textContent = L.lic_state === "expired" ? "License expired" : "Trial finished"; h.style.color = "#b91c1c"; }
     else { h.textContent = "Enter license"; }
     const ar = E("div", null, "margin-bottom:10px;color:#475569"); ar.setAttribute("dir", "rtl");
-    ar.textContent = L.licensed ? "الترخيص شغال على الجهاز ده." : L.readonly ? "انتهت النسخة التجريبية. بياناتك موجودة وتقدر تقرأ وتطبع بس." : "اكتب مفتاح الترخيص اللي وصلك."; m.appendChild(ar);
+    ar.textContent = L.licensed ? "الترخيص شغال على الجهاز ده." : L.readonly ? "انتهت النسخة التجريبية. بياناتك موجودة وتقدر تعرض وتدوّر بس." : "اكتب مفتاح الترخيص اللي وصلك."; m.appendChild(ar);
     const p = E("p", null, "margin:6px 0");
     p.innerHTML = L.licensed ? "Licensed to <b></b>.<br>Valid until: <b></b>.<br>Edition: <b></b>." : "To continue, send this <b>device code</b> to the developer and paste the license key you receive. The key works on this PC only.";
     if (L.licensed) { const bs = p.querySelectorAll("b"); bs[0].textContent = L.name; bs[1].textContent = L.expiry || "No expiry"; bs[2].textContent = L.edition === "full" ? "Full (Firebase and phone included)" : "Trial limit lifted"; }

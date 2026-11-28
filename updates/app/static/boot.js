@@ -58,7 +58,7 @@ async function boot() {
 
   document.title = `${st.connected_test?.replica ? "REPLICA" : "MAIN"} | ${st.test_mode && !(st.lic && st.lic.licensed) ? "ISOLATED TRIAL | " : ""}${st.title} - ${st.user}`;
   if (st.test_mode) {
-    const banner = el("div", null, st.trial_limit ? "TRIAL VERSION: " + st.trial_limit + " operations in total (each add or delete). Data stays on this PC. Use Quit to stop." : st.trial_printing ? "PRINT-ENABLED ISOLATED TRIAL: dummy data only. Real Windows default-printer output is enabled and uses paper/ink. Firebase, real shared folders and restore stay disabled. Use Quit to stop." : "ISOLATED TRIAL: dummy data only. Firebase, real shared folders, restore and printers are disabled. Use Quit to stop this trial. Normal work uses the MAIN or REPLICA program and your existing profile.");
+    const banner = el("div", null, st.trial_limit ? "TRIAL VERSION: " + st.trial_limit + " operations in total (each add, edit, delete or PDF print click). Data stays on this PC. Use Quit to stop." : st.trial_printing ? "PRINT-ENABLED ISOLATED TRIAL: dummy data only. Real Windows default-printer output is enabled and uses paper/ink. Firebase, real shared folders and restore stay disabled. Use Quit to stop." : "ISOLATED TRIAL: dummy data only. Firebase, real shared folders, restore and printers are disabled. Use Quit to stop this trial. Normal work uses the MAIN or REPLICA program and your existing profile.");
     banner.style.cssText = "background:#fff0b3;color:#392c00;padding:2px 10px;font-weight:700;font-size:11px;line-height:1.3;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis";
     
   }

@@ -143,6 +143,12 @@ def save_doc(uid, d):
             d["Delivered By"] = ""; d["Delivered At"] = ""   # set back to In Process: the delivery mark is cleared
     if not d.get("_kind") and getattr(ACTOR, "user", ""):
         d["Last Updated By"] = ACTOR.user
+    if core.TRIAL_LIMIT and not d.get("_kind"):  # trial: a real edit of an existing invoice counts as one operation
+        _prev = docs.get(uid)
+        if _prev is not None:
+            _skip = {"updated", "_rev", "Last Updated By"}
+            if {k: v for k, v in _prev.items() if k not in _skip} != {k: v for k, v in d.items() if k not in _skip}:
+                core.trial_bump(1)
     db_put([(uid, d)], 1, 1)
     k = d.get("_kind")
     if k not in {"review_plan","user_permissions"}:(wh_rows if k == "wh" else pinv_rows if k == "pi" else docs)[uid] = d
@@ -178,6 +184,8 @@ def delete_uids(uids, user=""):
         docs.pop(u, None)
         wh_rows.pop(u, None)
         pinv_rows.pop(u, None)
+    if core.TRIAL_LIMIT:
+        import license_mgr; license_mgr.status(core, True)
     bump()
     sync_now.set(); request_cloud()
 
@@ -2324,6 +2332,16 @@ class Hdl(BaseHTTPRequestHandler):
             return {"ok": True, "msg": f"{len(items)} items saved to '{name}'."}
 
         # ---- PDFs / printing ----
+        if core.TRIAL_LIMIT and not getattr(self, "_pdfgate", False) and path in ("/api/pdf/route", "/api/pdf/ho", "/api/pdf/list", "/api/pdf/wh", "/api/pdf/pinv"):  # trial: each PDF print click counts as one operation
+            try: core.trial_bump(1, pre_only=True)
+            except ValueError as e: return {"ok": False, "msg": str(e)}
+            self._pdfgate = True
+            try: _pdf_res = self.route(path, b, u)
+            finally: self._pdfgate = False
+            if isinstance(_pdf_res, dict) and _pdf_res.get("ok"):
+                try: core.trial_bump(1)
+                except ValueError as e: return {"ok": False, "msg": str(e)}
+            return _pdf_res
         if path == "/api/pdf/route":
             return pdf_route(b.get("title", "Invoice Report"), b.get("rep", "Proposal"), b.get("f", {}),
                              bool(b.get("save_only")))
